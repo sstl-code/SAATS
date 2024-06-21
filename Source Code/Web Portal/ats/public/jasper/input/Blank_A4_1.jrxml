@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.6.final using JasperReports Library version 6.20.6-5c96b6aa8a39ac1dc6b6bea4b81168e16dd39231  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4_1" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="232d04f4-b754-4698-9dcd-fe7123adb2c5">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="ATS"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="serialNo" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select * from ats.t_asset where  ta_asset_manufacture_serial_no=$P{serialNo}]]>
+	</queryString>
+	<field name="ta_asset_id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="ta_asset_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_asset"/>
+	</field>
+	<field name="ta_asset_type_master_id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="ta_asset_type_master_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_asset"/>
+	</field>
+	<field name="ta_asset_type_code" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="ta_asset_type_code"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_asset"/>
+	</field>
+	<field name="ta_asset_manufacture_serial_no" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="ta_asset_manufacture_serial_no"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_asset"/>
+	</field>
+	<field name="ta_asset_name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="ta_asset_name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_asset"/>
+	</field>
+	<field name="ta_asset_description" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="ta_asset_description"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_asset"/>
+	</field>
+	<field name="ta_asset_tag_number" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="ta_asset_tag_number"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_asset"/>
+	</field>
+	<field name="ta_asset_catagory" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="ta_asset_catagory"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_asset"/>
+	</field>
+	<field name="ta_creation_date" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.label" value="ta_creation_date"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_asset"/>
+	</field>
+	<field name="ta_created_by" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="ta_created_by"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_asset"/>
+	</field>
+	<field name="ta_effective_start_date" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.label" value="ta_effective_start_date"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_asset"/>
+	</field>
+	<field name="ta_last_updated_date" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.label" value="ta_last_updated_date"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_asset"/>
+	</field>
+	<field name="ta_last_updated_by" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="ta_last_updated_by"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_asset"/>
+	</field>
+	<field name="ta_effective_end_date" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.label" value="ta_effective_end_date"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_asset"/>
+	</field>
+	<field name="ta_asset_last_tag_scan_date" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.label" value="ta_asset_last_tag_scan_date"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_asset"/>
+	</field>
+	<field name="ta_asset_reason" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="ta_asset_reason"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_asset"/>
+	</field>
+	<field name="ta_asset_image" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="ta_asset_image"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_asset"/>
+	</field>
+	<field name="ta_asset_active_inactive_status" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="ta_asset_active_inactive_status"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_asset"/>
+	</field>
+	<field name="ta_last_audit_date" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.label" value="ta_last_audit_date"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_asset"/>
+	</field>
+	<field name="is_shown" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.label" value="is_shown"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_asset"/>
+	</field>
+	<field name="ta_asset_parent_id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="ta_asset_parent_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_asset"/>
+	</field>
+	<field name="operator_id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="operator_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_asset"/>
+	</field>
+	<field name="asset_image_lat" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="asset_image_lat"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_asset"/>
+	</field>
+	<field name="asset_image_long" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="asset_image_long"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_asset"/>
+	</field>
+	<field name="ta_asset_location_id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="ta_asset_location_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_asset"/>
+	</field>
+	<field name="pm_project_id" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="pm_project_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_asset"/>
+	</field>
+	<field name="created_at" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.label" value="created_at"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_asset"/>
+	</field>
+	<field name="updated_at" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.label" value="updated_at"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_asset"/>
+	</field>
+	<field name="deleted_at" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.label" value="deleted_at"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_asset"/>
+	</field>
+	<variable name="serialNo" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="53">
+			<staticText>
+				<reportElement x="267" y="23" width="100" height="30" uuid="96d62028-bb9f-461e-af29-e2cbafb9f5bc"/>
+				<textElement markup="styled">
+					<font fontName="Arial" size="20"/>
+				</textElement>
+				<text><![CDATA[SATS REPORT]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="69" splitType="Stretch">
+			<image>
+				<reportElement x="440" y="19" width="96" height="31" uuid="1aa661b9-d016-4523-9633-f2af65f9a01f"/>
+				<imageExpression><![CDATA["http://115.113.197.12:85/public/assets/images/SSTLLogo-white.png"]]></imageExpression>
+			</image>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="65" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="30" width="100" height="30" uuid="367d1ef3-d77f-4dc7-a022-faa1c52e975e"/>
+				<text><![CDATA[Serial Number]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="160" y="30" width="100" height="30" uuid="f1b92694-3837-4bc0-aaae-97e5232a540c"/>
+				<text><![CDATA[Asset Name]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="60" width="100" height="30" uuid="8dabe5c0-7917-49be-82d4-40a5d6a36a7a">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b26786f0-b134-43da-814e-c18f89c8e06f"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{ta_asset_manufacture_serial_no}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="160" y="60" width="100" height="30" uuid="545c9295-59c5-42c4-94d2-ba4eb07323d1">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="26329843-a708-44f5-9c99-c1d7e335a564"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{ta_asset_name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="72" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="55" splitType="Stretch">
+			<textField>
+				<reportElement x="450" y="12" width="100" height="30" uuid="e4014dcf-4b3a-448c-a23f-88aee2d2fe8d"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

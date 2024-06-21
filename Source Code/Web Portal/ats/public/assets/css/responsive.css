@@ -1,0 +1,65 @@
+  /* login input code */
+  
+
+
+
+
+
+
+
+/* forgot password css */
+
+
+
+
+
+
+/*disabled css*/
+
+input[type="text"]:disabled {
+  background: #ccc;
+  opacity: 0.2;
+}
+
+input[type="password"]:disabled {
+  background: #ccc;
+  opacity: 0.2;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* confirm password css */
+
+.Confirm-page {
+  position: relative;
+  width: 440px;
+  margin: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+
+/* Asset History */
+.assetserial {
+  left: 26px;
+    position: relative;
+}
+
+
+
+
+.Search.search_box {
+    bottom: 8px;
+    position: relative;
+    height: 40px
+}
+

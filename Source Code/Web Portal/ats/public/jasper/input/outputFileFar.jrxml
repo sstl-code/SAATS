@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.6.final using JasperReports Library version 6.20.6-5c96b6aa8a39ac1dc6b6bea4b81168e16dd39231  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ERP FAR" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="28544c22-d262-4a76-af95-7cbb3a596173">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="229"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="770"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.jrdax"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<parameter name="LogoURL" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT *
+FROM ats.t_pm_approval
+WHERE 
+	 ats.t_pm_approval.task_status = 'Completed' 
+	 AND ats.t_pm_approval.task_title not Like 'Audit%' and output_file_generated!='t']]>
+	</queryString>
+	<field name="tpm_asset_id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="tpm_asset_id"/>
+		<property name="com.jaspersoft.studio.field.label" value="tpm_asset_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_pm_approval"/>
+	</field>
+	<field name="tpm_asset_type_master_id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="tpm_asset_type_master_id"/>
+		<property name="com.jaspersoft.studio.field.label" value="tpm_asset_type_master_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_pm_approval"/>
+	</field>
+	<field name="tpm_asset_type_code" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="tpm_asset_type_code"/>
+		<property name="com.jaspersoft.studio.field.label" value="tpm_asset_type_code"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_pm_approval"/>
+	</field>
+	<field name="tpm_asset_manufacture_serial_no" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="tpm_asset_manufacture_serial_no"/>
+		<property name="com.jaspersoft.studio.field.label" value="tpm_asset_manufacture_serial_no"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_pm_approval"/>
+	</field>
+	<field name="tpm_asset_name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="tpm_asset_name"/>
+		<property name="com.jaspersoft.studio.field.label" value="tpm_asset_name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_pm_approval"/>
+	</field>
+	<field name="tpm_asset_description" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="tpm_asset_description"/>
+		<property name="com.jaspersoft.studio.field.label" value="tpm_asset_description"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_pm_approval"/>
+	</field>
+	<field name="tpm_asset_tag_number" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="tpm_asset_tag_number"/>
+		<property name="com.jaspersoft.studio.field.label" value="tpm_asset_tag_number"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_pm_approval"/>
+	</field>
+	<field name="tpm_asset_parent_id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="tpm_asset_parent_id"/>
+		<property name="com.jaspersoft.studio.field.label" value="tpm_asset_parent_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_pm_approval"/>
+	</field>
+	<field name="tpm_asset_site_id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="tpm_asset_site_id"/>
+		<property name="com.jaspersoft.studio.field.label" value="tpm_asset_site_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_pm_approval"/>
+	</field>
+	<field name="tpm_asset_status" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="tpm_asset_status"/>
+		<property name="com.jaspersoft.studio.field.label" value="tpm_asset_status"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_pm_approval"/>
+	</field>
+	<field name="tpm_end_date" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="tpm_end_date"/>
+		<property name="com.jaspersoft.studio.field.label" value="tpm_end_date"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_pm_approval"/>
+	</field>
+	<field name="tpm_asset_last_tag_scan_date" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="tpm_asset_last_tag_scan_date"/>
+		<property name="com.jaspersoft.studio.field.label" value="tpm_asset_last_tag_scan_date"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_pm_approval"/>
+	</field>
+	<field name="tpm_remarks" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="tpm_remarks"/>
+		<property name="com.jaspersoft.studio.field.label" value="tpm_remarks"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_pm_approval"/>
+	</field>
+	<field name="tpm_supervisor_id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="tpm_supervisor_id"/>
+		<property name="com.jaspersoft.studio.field.label" value="tpm_supervisor_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_pm_approval"/>
+	</field>
+	<field name="tpm_technician_id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="tpm_technician_id"/>
+		<property name="com.jaspersoft.studio.field.label" value="tpm_technician_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_pm_approval"/>
+	</field>
+	<field name="pm_project_id" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="pm_project_id"/>
+		<property name="com.jaspersoft.studio.field.label" value="pm_project_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_pm_approval"/>
+	</field>
+	<field name="pm_task_id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="pm_task_id"/>
+		<property name="com.jaspersoft.studio.field.label" value="pm_task_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_pm_approval"/>
+	</field>
+	<field name="created_at" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="created_at"/>
+		<property name="com.jaspersoft.studio.field.label" value="created_at"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_pm_approval"/>
+	</field>
+	<field name="updated_at" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="updated_at"/>
+		<property name="com.jaspersoft.studio.field.label" value="updated_at"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_pm_approval"/>
+	</field>
+	<field name="deleted_at" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="deleted_at"/>
+		<property name="com.jaspersoft.studio.field.label" value="deleted_at"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_pm_approval"/>
+	</field>
+	<field name="id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="id"/>
+		<property name="com.jaspersoft.studio.field.label" value="id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_pm_approval"/>
+	</field>
+	<field name="case_no" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="case_no"/>
+		<property name="com.jaspersoft.studio.field.label" value="case_no"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_pm_approval"/>
+	</field>
+	<field name="site_code" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="site_code"/>
+		<property name="com.jaspersoft.studio.field.label" value="site_code"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_pm_approval"/>
+	</field>
+	<field name="technician_name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="technician_name"/>
+		<property name="com.jaspersoft.studio.field.label" value="technician_name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_pm_approval"/>
+	</field>
+	<field name="task_title" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="task_title"/>
+		<property name="com.jaspersoft.studio.field.label" value="task_title"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_pm_approval"/>
+	</field>
+	<field name="approver_name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="approver_name"/>
+		<property name="com.jaspersoft.studio.field.label" value="approver_name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_pm_approval"/>
+	</field>
+	<field name="task_status" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="task_status"/>
+		<property name="com.jaspersoft.studio.field.label" value="task_status"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_pm_approval"/>
+	</field>
+	<variable name="V_PageNo_Title" class="java.lang.Integer" resetType="Page" incrementType="Page" calculation="System">
+		<variableExpression><![CDATA[new Integer(1)]]></variableExpression>
+		<initialValueExpression><![CDATA[$V{PAGE_NUMBER}]]></initialValueExpression>
+	</variable>
+	<variable name="V_PageNo_PageHeader" class="java.lang.Integer" resetType="Page" incrementType="Page" calculation="System">
+		<variableExpression><![CDATA[new Integer(1)]]></variableExpression>
+		<initialValueExpression><![CDATA[new Integer($V{PAGE_NUMBER}.intValue()+1)]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="72" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="0" width="160" height="45" uuid="6af34859-fcd2-4567-bef2-a5a331262abc"/>
+				<imageExpression><![CDATA[$P{LogoURL}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement positionType="Float" x="210" y="26" width="150" height="24" uuid="32294ea0-4758-4845-8c02-d5451fc0588f"/>
+				<textElement textAlignment="Left">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[ERP FAR Update ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToTallestObject" x="182" y="50" width="73" height="18" uuid="6d05b930-e21b-4e39-9653-2f2f37a73fd3">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Report Date:]]></text>
+			</staticText>
+			<textField pattern="dd-MMM-yyyy HH:mm:ss">
+				<reportElement x="256" y="50" width="141" height="20" uuid="18c1e809-4299-4ea5-a1c2-7464d7ef7442">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="417" y="0" width="100" height="30" uuid="e07c3029-5cf1-4ff4-8489-04df21f17407"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="519" y="0" width="46" height="30" uuid="00021c49-b6ad-417d-a485-dbd5675d0839"/>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[" of " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="41">
+			<printWhenExpression><![CDATA[Boolean.valueOf($V{PAGE_NUMBER}.intValue() != 1)]]></printWhenExpression>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<staticText>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="1" y="0" width="58" height="20" uuid="c288536b-72b3-40fc-ae8f-479ea0341a67">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+					<paragraph leftIndent="0"/>
+				</textElement>
+				<text><![CDATA[ Case No.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="451" y="0" width="102" height="20" uuid="668748f8-7522-4901-ab72-12bada42f928">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Approved on]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="180" y="0" width="76" height="20" uuid="16874998-bf45-48d4-8d73-dc2464cdfdf3">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Submitted By]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="59" y="0" width="121" height="20" uuid="6a865e6e-f3a6-41ef-b8cd-229963f79b17">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Site]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="357" y="0" width="94" height="20" uuid="05d9b975-7a74-4a72-889d-246ec97011f1">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+					<paragraph leftIndent="0"/>
+				</textElement>
+				<text><![CDATA[Approver Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="256" y="0" width="101" height="20" uuid="bdbbad98-b032-49b6-9b8c-a939837cc23b">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Task Title]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<rectangle>
+				<reportElement stretchType="RelativeToTallestObject" mode="Opaque" x="0" y="0" width="553" height="16" backcolor="#F0F0F0" uuid="110740e6-7d58-4b5d-a30b-a94b38b653f6">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[Boolean.valueOf($V{REPORT_COUNT}.intValue()%2==0)]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<textField pattern="dd-MMM-yyyy HH:mm:ss" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="451" y="0" width="114" height="16" uuid="d8be45e6-0aec-41f6-90b6-1241454100c0">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box topPadding="0" leftPadding="5" bottomPadding="0" rightPadding="0">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{updated_at}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="1" y="0" width="58" height="16" uuid="344ed5a1-e32f-4361-b3c5-8778a34e882e">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box topPadding="0" leftPadding="5" bottomPadding="0" rightPadding="0">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{case_no}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="180" y="0" width="76" height="16" uuid="8b530921-f7a5-4d2a-aeea-cdf59958e214">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box topPadding="0" leftPadding="5" bottomPadding="0" rightPadding="0">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{technician_name}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="59" y="0" width="121" height="16" uuid="b7bcecbc-aadc-4c6a-87ee-a93139511c0b">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box topPadding="0" leftPadding="5" bottomPadding="0" rightPadding="0">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{site_code}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="357" y="0" width="94" height="16" uuid="ee5b24c4-2e32-44e2-a948-8c04a4e8ab35">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{approver_name}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="256" y="0" width="101" height="16" uuid="cc04dafe-3830-42df-bdfe-bb32b2f2f7a6">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<box topPadding="0" leftPadding="5" bottomPadding="0" rightPadding="0">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{task_title}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
