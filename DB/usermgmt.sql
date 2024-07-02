@@ -416,3 +416,12 @@ CREATE TABLE "public"."users" (
 
 INSERT INTO "users" ("id", "name", "email", "email_verified_at", "password", "remember_token", "created_at", "updated_at", "is_supervisor", "mobile_number", "user_address", "gender", "status", "otp", "is_admin") VALUES
 (1,	'Administrator',	'satsa616@gmail.com',	NULL,	'$2y$10$Y9o0r4vGNmSXX29t.hrih.jp8viO/e3h27I1wG0/Gb8Xo3V4SI552',	NULL,	'2023-10-19 19:33:58',	'2024-04-29 11:27:51',	'f',	'1234567890',	NULL,	'male',	'active',	NULL,	't');
+
+
+INSERT INTO "modules" ("id", "module_name", "module_description", "module_icon", "status", "created_at", "updated_at", "url", "role_id", "dashBoardCheck") VALUES
+(7,	'User Management System',	'User Management',	'/build/assets/img/usermanagement-icon.svg',	't',	NULL,	NULL,	'',	NULL,	NULL),
+(3,	'OMS (Order Management System)',	'this is a test module',	'/build/assets/img/dash-card3.svg',	't',	'2023-09-25 20:14:21',	'2023-09-25 20:14:21',	NULL,	NULL,	't'),
+(2,	'UCP (Unified Customer Portal)',	'this is a test module',	'/build/assets/img/dash-card-2.svg',	't',	'2023-09-25 20:14:21',	'2023-09-25 20:14:21',	NULL,	NULL,	't'),
+(1,	'ATS (Asset Tagging and Tracking)',	'this is a test module',	'/build/assets/img/dash-card1-logo.svg',	't',	'2023-09-25 20:14:21',	'2023-09-25 20:14:21',	'https://ats.esquaressquaredev.com/authorize_user',	NULL,	't');
+
+-- 2024-07-01 22:43:26.302529+05:30
