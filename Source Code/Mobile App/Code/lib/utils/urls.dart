@@ -1,9 +1,9 @@
 class Urls {
+ //hostname
   static const String hostName = "http://115.113.197.12:86";
-
+ //baseURL
   static const String baseUrl = "$hostName/public/api";
-// static const String baseUrl = "https://ats.esquaressquaredev.com/api";
-  // Login
+ // Login
   static const String loginUrl = "$baseUrl/login";
   static const String changePasswordUrl = "$baseUrl/changepassword";
   static const String refreshTokenUrl = "$baseUrl/refreshtoken_login";
