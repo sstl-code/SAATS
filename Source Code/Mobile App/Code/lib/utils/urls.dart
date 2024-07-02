@@ -2,7 +2,7 @@ class Urls {
  //hostname
   static const String hostName = "http://54.255.194.66";
  //baseURL
-  static const String baseUrl = "$hostName/public/api";
+  static const String baseUrl = "$hostName/ats/public/api";
  // Login
   static const String loginUrl = "$baseUrl/login";
   static const String changePasswordUrl = "$baseUrl/changepassword";
