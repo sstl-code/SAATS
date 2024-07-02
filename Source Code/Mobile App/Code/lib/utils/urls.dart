@@ -1,6 +1,6 @@
 class Urls {
  //hostname
-  static const String hostName = "http://115.113.197.12:86";
+  static const String hostName = "http://54.255.194.66";
  //baseURL
   static const String baseUrl = "$hostName/public/api";
  // Login
