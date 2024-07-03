@@ -14,7 +14,7 @@
     <p>Password: {{ $password }}</p>
 
     <p>Use the link below to access the  Web Portal:</p>
-    <a href="http://115.113.197.12/usermanagement/public/login">View Web Portal</a>
+    <a href="{{env('SATS_URL')}}">View Web Portal</a>
 
     <p>Also, download and install the ATS Mobile App from the Play Store.</p>
 
