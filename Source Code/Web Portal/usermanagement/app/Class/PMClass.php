@@ -160,9 +160,6 @@ class PMClass
     public function createUser($accessToken,$userdetails=[])
     {
         $apiServer =  env('PM_SERVER');
-        Log::debug("Token-->".$accessToken);
-        Log::debug(json_encode($userdetails));
-
 
 $postParams = array(
    'usr_username'   => isset($userdetails['usr_username'])?$userdetails['usr_username']:'',

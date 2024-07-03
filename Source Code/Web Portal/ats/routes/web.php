@@ -88,6 +88,7 @@ Route::get('/srnUpload_json', [srnUpload_json::class, 'getSrNData']);
 Route::post('/location_user_mapping', [batch_process::class, 'location_user_mapping']);
 Route::post('/mapview', [location_jason_controller::class, 'near_site']);
 Route::post('/addasset_srn_stn', [batch_process::class, 'addasset_srn_stn']);
+Route::post('/add_site_batch', [batch_process::class, 'add_site']);
 
 Route::get('/stnClosure', [stnTaskClosureController::class, 'stnClosure']);
 

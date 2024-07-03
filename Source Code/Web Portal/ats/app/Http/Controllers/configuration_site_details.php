@@ -15,21 +15,7 @@ class configuration_site_details extends Controller
             'status'=>'success',
             'configLocation'=>$configLocation,
         ]);
-        //return view("config_site",compact('configLocation'));
+      
     }
 
-    // public function update_site(Request $request){
-    //     $update = DB::table(ats.t_location)
-    //     ->where('tl_location_id',$request->id)
-    //     ->update([
-    //         'tl_location_type'=>$request->
-    //         'tl_location_name'=>$request->
-    //         'tl_location_address'=>$request->
-    //         'tl_location_status'=>$request->
-    //     ]);
-    //     return response()->json([
-    //         'status'=>'success',
-    //         'update'=>$update
-    //     ]);
-    // }
 }

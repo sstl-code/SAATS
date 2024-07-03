@@ -22,8 +22,10 @@ class Site_Add implements ToCollection, WithHeadingRow
 		$current_date = Carbon::now();	
         foreach($collection as $row){
           if(isset($row['site_code'])){
-			$location_id =  Location::where('tl_location_code', trim($row['site_code']))->value('tl_location_id');
-			
+		         	$location_id =  Location::where('tl_location_code', trim($row['site_code']))->value('tl_location_id');
+			        if(!empty($location_id)){
+                Location::
+              }
            }
         }
     }

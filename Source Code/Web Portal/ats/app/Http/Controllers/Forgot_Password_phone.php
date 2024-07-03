@@ -11,10 +11,7 @@ class Forgot_Password_phone extends Controller
     {
         $userId=$request->get('userId');
         $userEmail=$request->get('userEmail');
-        //dd($search);
-
         $email_verification=DB::table('usr.v_user_login')->where('tu_user_email',$userEmail)->first();
-        //dd($email_verification);
         $email=$email_verification->tu_user_email;
         $otp=rand(1234,9876);
         dd($otp);

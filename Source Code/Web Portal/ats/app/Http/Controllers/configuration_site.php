@@ -119,8 +119,6 @@ class configuration_site extends Controller
       ];
 
    Observable::storeLog('Site Type Modification', 'App\Models\LocationType','UPDATED',$request->id,$oldDataArray,$newData,Auth::user()->id,'Web Portal'); 
-    //print_r($request->lt_location_type_id);die("mmm");
-    //session()->flash('status', 'Record Updated Successfully.');
     return response()->json([
       'status' => 'success',
       'updatesite' => $updatesite
@@ -133,33 +131,18 @@ class configuration_site extends Controller
       ->orWhere('la_location_type_id', 0)
       ->where('la_status', 'Valid')
       ->get();
-
-    // $site_all_attribute=DB::table("product.t_location_attribute_master")
-    // ->where('la_location_type_id',$request->la_location_type_id)
-    // ->orWhere('la_location_type_id',0)
-    // ->where('la_status','ACTIVE')
-    // ->get();
     return response()->json([
       'status' => 'success',
       'fetch_site_attributes' => $site_all_attribute
     ]);
-    //print_r($request->la_location_type_id);die("mmm");
-
 
   }
   public function add_locationdetails(Request $request)
   {
-    //dd($request->toArray());
-
     $site = $request->lt_location_type;
-    // dd($site);
-
     $lt_location_type = LocationType::select('lt_location_type')->where('lt_location_type_id', $request->lt_location_type_masterid)->get(['lt_location_type']);
 
-    // dd( $lt_location_type_id);
     $lt_location_type = $lt_location_type[0]->lt_location_type;
-    // dd($lt_location_type);
-
     $location = new Location;
 
     $location->tl_location_type_master_id = $request->lt_location_type_masterid;
@@ -197,7 +180,6 @@ class configuration_site extends Controller
   }
 
     return $location;
-    //session()->flash('status', 'Record Created Successfully .');
   }
 
 
@@ -205,11 +187,7 @@ class configuration_site extends Controller
   {
 
     $site = $request->lt_location_type;
-    // dd($site);
-
     $lt_location_type = LocationType::select('lt_location_type')->where('lt_location_type_id', $request->lt_location_type_masterid)->get(['lt_location_type']);
-
-    // dd( $lt_location_type_id);
     $lt_location_type = $lt_location_type[0]->lt_location_type;
 
     Location::where('tl_location_id', $request->location_id)
@@ -219,10 +197,8 @@ class configuration_site extends Controller
         'tl_created_by'=>Auth::user()->name
       ]);
     if (isset($request->attr)) {
-      //return $request->attr;
       foreach ($request->attr as $key => $val) {
         $attrData = explode("_", $key);
-        //return $attrData[1];
         if(strtoupper(trim($attrData[0]))=='LATITUDE')
         {
           Location::where('tl_location_id', $request->location_id)
@@ -310,16 +286,13 @@ class configuration_site extends Controller
     Observable::storeLog('Site Type Fixed Attribute Addition', 'App\Models\LoactionAttributeMaster','CREATED',0,$oldDataArray,$newData,Auth::user()->id,'Web Portal');
 
     return DB::connection('pgsql')->table('product.t_location_attribute_master')->max('la_location_attribute_id');
-    //session()->flash('status', 'Record Created Successfully .');
 
   }
 
   public function fixed_fetch_atr_edit(Request $request)
   {
-    //dd($request->fixatt_id);
     $fixed_atr_fetch_edit = LoactionAttributeMaster::where('la_location_attribute_id', $request->fixedatr_id)
       ->get();
-    //dd($fetchfixattr);
 
     return response()->json([
       'status' => 'success',
@@ -369,7 +342,6 @@ class configuration_site extends Controller
             ];
   
     Observable::storeLog('Site Type Fixed Attribute Modification', 'App\Models\LoactionAttributeMaster','UPDATED',$request->id,$oldDataArray,$newData,Auth::user()->id,'Web Portal'); 
-    //session()->flash('status', 'Record Updated Successfully .');
 
     return response()->json([
       'status' => 'success',
@@ -384,8 +356,6 @@ class configuration_site extends Controller
     $lt_location_type = $lt_location_type[0]->lt_location_type;
     $inserrt_product2 =LoactionAttributeMaster::create(
         [
-
-          //  'la_location_attribute_id' => $request->la_location_attribute_id,
           'la_location_attribute_location_type' => $lt_location_type,
           'la_location_attribute_name' => $request->la_location_attribute_name,
           'la_location_attribute_description' =>  $request->la_location_attribute_description,
@@ -426,17 +396,12 @@ class configuration_site extends Controller
     Observable::storeLog('Site Type Dynamic Attribute Addition', 'App\Models\LoactionAttributeMaster','CREATED',0,$oldDataArray,$newData,Auth::user()->id,'Web Portal');
     return DB::connection('pgsql')->table('product.t_location_attribute_master')->max('la_location_attribute_id');
 
-    //session()->flash('status', 'Record Created Successfully .');
-
   }
 
   public function dynamic_fetch_atr_edit(Request $request)
   {
-    //dd($request->fixatt_id);
     $dynamic_atr_fetch_edit = LoactionAttributeMaster::where('la_location_attribute_id', $request->dynamicatr_id)
       ->get();
-    //dd($fetchfixattr);
-
     return response()->json([
       'status' => 'success',
       'dynamic_atr_fetch_edit' => $dynamic_atr_fetch_edit
@@ -495,9 +460,6 @@ class configuration_site extends Controller
             ];
   
     Observable::storeLog('Site Type Dynamic Attribute Modification', 'App\Models\LoactionAttributeMaster','UPDATED',$request->id,$oldDataArray,$newData,Auth::user()->id,'Web Portal'); 
-
-    //session()->flash('status', 'Record Updated Successfully .');
-
     return response()->json([
       'status' => 'success',
       'fixed_atr_update' =>  $fixed_atr_update
