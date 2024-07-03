@@ -44,8 +44,6 @@ class Stn_Srn_AddAsset implements ToCollection, WithHeadingRow
 		$uploadfileoutput = $this->outputfilename;
         $current_date = Carbon::now();
 		
-
-		
 		FileStore::create([					
 			'file_name' => $filename,
 			'file_name_output' => $uploadfileoutput,
@@ -373,6 +371,7 @@ class Stn_Srn_AddAsset implements ToCollection, WithHeadingRow
 					
 					$asset_id = asset::where('ta_asset_manufacture_serial_no', $assetdata['manufacturer_serial_no'])->value('ta_asset_id');
 					for($i=0; $i < $attr_size_update_asset; $i++){
+						if(isset($assetdata['atribute'.$i + 1])){
 						$asset_type_attribute_master_id = Asset_type_attribute_master_model::where('ata_asset_type_attribute_name', $assetdata['atribute'.$i + 1])->value('ata_asset_type_attribute_id');
 						$ata_asset_type_id = Asset_type_attribute_master_model::where('ata_asset_type_attribute_name', $assetdata['atribute'.$i + 1])->value('ata_asset_type_id');
 						$at_asset_type_name = "";
@@ -381,7 +380,9 @@ class Stn_Srn_AddAsset implements ToCollection, WithHeadingRow
 						}
 						$asset_type_attribute_master_code = Asset_type_attribute_master_model::where('ata_asset_type_attribute_name', $assetdata['atribute'.$i + 1])->value('ata_asset_type_attribute_id');
 						$attrcheck = Asset_Attribute::where('at_asset_attribute_code', $asset_type_attribute_master_code)->where('at_asset_id', $asset_id)->get();
+					  }
 						if(!empty($attrcheck) && !empty($asset_type_attribute_master_id) && !empty($asset_id) && !empty($asset_type)){
+							if(isset($assetdata['atribute'.$i + 1])){
 							Asset_Attribute::where('at_asset_attribute_code', $asset_type_attribute_master_code)->where('at_asset_id', $asset_id)->update([					
 								'at_asset_type_attribute_master_id' => $asset_type_attribute_master_id,
 								'at_asset_id' => $asset_id,
@@ -391,8 +392,10 @@ class Stn_Srn_AddAsset implements ToCollection, WithHeadingRow
 								'at_asset_attribute_value_text' => $assetdata['atributevalue'.$i + 1],
 								'at_asset_attribute_name' => $assetdata['atribute'.$i + 1],								                   
 							]);
+						   }
 						}
 						if(count($attrcheck) < 1 && !empty($asset_type_attribute_master_id) && !empty($asset_id)){
+							if(isset($assetdata['atribute'.$i + 1])){
 							Asset_Attribute::create([					
 								'at_asset_type_attribute_master_id' => $asset_type_attribute_master_id,
 								'at_asset_id' => $asset_id,
@@ -402,6 +405,7 @@ class Stn_Srn_AddAsset implements ToCollection, WithHeadingRow
 								'at_asset_attribute_value_text' => $assetdata['atributevalue'.$i + 1],
 								'at_asset_attribute_name' => $assetdata['atribute'.$i + 1],								                   
 							]);	
+						  }
 						}
 					}
 				}

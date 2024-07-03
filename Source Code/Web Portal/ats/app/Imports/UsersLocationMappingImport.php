@@ -44,7 +44,7 @@ class UsersLocationMappingImport implements ToCollection, WithHeadingRow
                     'ul_user_id' => $user_id,
                     'ul_user_role_id' => '0',
                     'status'=>'Failed',
-                    'reason'=>'Site and user does not exist.'                   				                			                    
+                    'reason'=>$row['site_code'].' Site and '.$row['user_email'].' user does not exist.'                   				                			                    
                 ]);
             }else if(empty($location_id)){
                 
@@ -54,7 +54,7 @@ class UsersLocationMappingImport implements ToCollection, WithHeadingRow
                     'ul_user_id' => $user_id,
                     'ul_user_role_id' => '0',
                     'status'=>'Failed',
-                    'reason'=>'Location does not exist.'                   				                			                    
+                    'reason'=> $row['site_code'].'Location does not exist.'                   				                			                    
                 ]);
             }else if(empty($user_id)){
                 
@@ -64,7 +64,7 @@ class UsersLocationMappingImport implements ToCollection, WithHeadingRow
                     'ul_user_id' => $user_id,
                     'ul_user_role_id' => '0',
                     'status'=>'Failed',
-                    'reason'=>'User does not exist.'                   				                			                    
+                    'reason'=>$row['user_email'].' User does not exist.'                   				                			                    
                 ]);
             }
             

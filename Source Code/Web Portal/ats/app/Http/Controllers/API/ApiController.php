@@ -1726,7 +1726,7 @@ Site Code: ' . $Site_Code]);
             $httpStatus = curl_getinfo($ch1, CURLINFO_HTTP_CODE);
             curl_close($ch1);
 
-            $access = implode(" ", json_decode($functionData)->data);
+             $access = implode(" ", json_decode($functionData)->data);
 
             $postParams = array(
                 'grant_type'    => 'password',
