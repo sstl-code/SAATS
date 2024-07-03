@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Crypt;
 use App\Models\RoleUserfunctionMappers;
+use App\Class\PMClass;
 
 class ModuleManagementController extends Controller
 { 
@@ -195,13 +196,8 @@ class ModuleManagementController extends Controller
      
         $oldDataArray=[];
 
-     
-        
-        
-        //dd($request->id);
-        try{
-       // $adminUsers = (new User)->administrators();
-        //dd($adminUsers);
+     try{
+       
         
         if(!empty($request->id)){
             //dd("inside");
@@ -243,9 +239,16 @@ class ModuleManagementController extends Controller
             $ResponseAuditTrail=CommonFunction::auditTrail('User Modification', 'User',$request->id,$oldDataArray,$newData,Auth::user()->id,'User Management'); 
                 
             if (empty($request->id)){
+                
                 User::where('id', $user_Add->id)->update(['password'=> Crypt::encrypt($request->password),'status'=>'pending',]);
                 $message='User Added Successfully';
-                
+                if(isset($request->is_supervisor)){
+                $PMClass = new PMClass();
+                $accessToken = $PMClass->pm_login(env('PM_USERNAME'),env('PM_PASSWORD'));
+               
+                $userdetails=["usr_username"=>strtolower($request->email),'usr_firstname'=>$request->name,'usr_email'=>$request->email,'usr_new_pass'=>$request->password,'usr_address'=>$request->user_address,'usr_phone'=>$request->mobile_number];
+                $PMClass->createUser($accessToken,$userdetails);
+                }
                 $oldDataArray="";
                 $newDataArray=User::where('id', $user_Add->id)->first();
                 $newData=[
@@ -285,17 +288,10 @@ class ModuleManagementController extends Controller
         } 
         catch(\Exception $e){
             \Log::error('Error adding user: ' . $e->getMessage());
-            //print_r($e);
+          
             return redirect()->back()->with('error', 'An error occurred while adding the user.');
         }
-        //dd($ResponseAuditTrail);
-
-     
-          //dd($newData);
-
-         
-
-        
+       
     }
 
     public function checkexistingemail(Request $request){
@@ -311,8 +307,7 @@ class ModuleManagementController extends Controller
 
     public function checkexistinRole(Request $request){
         $role_check=Roles::select('role_name')->where('role_name',$request->role_name)->first();
-        //dd($request->email);
-        //dd($role_check);
+        
         return response()->json([
             'status' => 'success',
             'roleCheck' =>$role_check
@@ -320,21 +315,7 @@ class ModuleManagementController extends Controller
 
     }
 
-    // public function userAdd(Request $request){
-    //     $role_Add=Roles::updateOrCreate(
-    //         ['id'=>$request->id],
-    //         [
-    //             'name'=>$request->role_name,
-    //             'email'=>$request->email,
-    //             'password'=>$request->password
-    //             'mobile_number'=>$request->mobile_number,
-    //             'user_address'=>$request->user_address,
-    //             'gender'=>$request->gender,
-    //             'is_supervisor'=>$request->is_supervisor,
-    //             'status'=>$request->status
-                
-    //         ]);
-    // }
+   
 
     public function userRoleMapp(){
         $allUser = User::orderBy('name', 'asc')->get();

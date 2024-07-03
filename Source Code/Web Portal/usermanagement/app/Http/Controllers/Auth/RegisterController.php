@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Crypt;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use App\Class\PMClass;
 
 class RegisterController extends Controller
 {
@@ -82,7 +83,12 @@ class RegisterController extends Controller
             'status' => 'pending',
             'is_admin'=>false,
         ]);
-    
+        if(isset($data['is_supervisor'])){
+            $PMClass = new PMClass();
+            $accessToken = $PMClass->pm_login(env('PM_USERNAME'),env('PM_PASSWORD'));
+            $userdetails=["usr_username"=>strtolower($data['email']),'usr_firstname'=>$data['name'],'usr_email'=>$data['email'],'usr_new_pass'=>$data['password'],'usr_address'=>$data['user_address'],'usr_phone'=>$data['mobile_number']];
+            $PMClass->createUser($accessToken,$userdetails);
+            }
         $roleId = Roles::where('role_name', 'Supervisor')->first(['id']);
     
         $mapRoleMod = RoleUserMappers::updateOrCreate(

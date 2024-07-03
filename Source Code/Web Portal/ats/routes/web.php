@@ -63,13 +63,12 @@ Route::get('/', function () {
 Route::get('check-session', [UserController::class, 'checkSession']); 
 Route::middleware(['auth',RoleChecker::class])->group(function () {
 Route::get('/dashboard','App\Http\Controllers\DashboardController@dashboard');
-// Route::get('/asset_view','App\Http\Controllers\DashboardController@asset_view');
-// Route::get('/location_view', [location_listController::class, 'index']);
+
 Route::get('/location_view', [location_listController::class, 'index']);
-// Route::get('/', $controller_path . '\location_view\locationViewController@index');
+
 Route::get('/asset_view', [assetView::class, 'index']);
 
-//Route::get('/change_password',[changePassword::class, 'index']);
+
 Route::get('/change_password',[change_passwordweb::class, 'index']);
 
 Route::post('/supervisor_technician_mapping', [Asset_details::class, 'supervisor_technician_mapping']);
@@ -78,48 +77,22 @@ Route::post('/supervisor_technician_mapping', [Asset_details::class, 'supervisor
 
 Route::post('/pendingApprovalAccept', [pendingApprovalView::class, 'pendingApprovalAccept']);
 Route::get('/Operator_Site_Asset_view', [operatorSiteAssetView::class, 'index']);
-// Route::get('/Technician_site_Mapping', [technicianSiteMappingView::class, 'index']);
 Route::get('/Technician_site_Worklist_view', [technicianSiteWorklistView::class, 'index']);
-
-// Route::get('/Technician_site_Worklist_view', [technicianSiteWorklistView::class, 'index']);
-
-
-
-
-
-
-
 
 Route::get('/configuration_site', [configuration_site::class, 'index']);
 
 
-
-
-
 Route::get('/configuration_location_details', [configuration_site_details::class, 'index']);
-
-//Route::get('/configuration_location_edit', [configuration_site_details::class, 'index']);
-//Route::get('/configuration_site', [configuration_site_details::class, 'index']);
-
-
 
 Route::get('/srnUpload_json', [srnUpload_json::class, 'getSrNData']);
 Route::post('/location_user_mapping', [batch_process::class, 'location_user_mapping']);
 Route::post('/mapview', [location_jason_controller::class, 'near_site']);
 Route::post('/addasset_srn_stn', [batch_process::class, 'addasset_srn_stn']);
 
-
-
 Route::get('/stnClosure', [stnTaskClosureController::class, 'stnClosure']);
-//Route::get('/stnClosure', [stnTaskClosureController::class, 'srnClosure']);
-
 
 Route::get('/AdditionalIteamBatchProcess', [AdditionalBatchProcess::class, 'index']);
 Route::post('/additional_item_batch', [AdditionalBatchProcess::class, 'assetbatch']);
-
-
-
-//Route::get('/inventory_far', [ExcelFarMisMatchInventory::class, 'index']);
 Route::get('/bulkasst_upload', [assetaddbatchcontroller_jason::class, 'assetaddbatch']);
 Route::post('/congiguration_assettype', [Configuration_assetcontroller::class, 'addasset_type']);
 Route::post('/congiguration_asset_update', [Configuration_assetcontroller::class, 'updasset_type']);

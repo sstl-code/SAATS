@@ -20,12 +20,8 @@ use App\Http\Controllers\API\CommonController;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-Route::post('/audit_accept', [ApiController::class, 'audit_accept']);
 
-//Route::resource('/home', HomeController::class);
+Route::post('/audit_accept', [ApiController::class, 'audit_accept']);
 
 Route::post('/login', [ApiController::class, 'login']);
 Route::post('/testapi', [ApiController::class, 'testapi']);
@@ -69,28 +65,17 @@ Route::Post('/asset_tagging', [ApiController::class, 'asset_tagging'])->middlewa
 
 Route::post('/get_task_list_by_location', [ApiController::class, 'Get_task_list_by_location'])->middleware(['scope:api-get_task_list_by_location']);
 Route::post('/update_srn', [ApiController::class, 'update_srn'])->middleware(['scope:api-update_srn']);
-
-
-
 Route::post('/add_location', [ApiController::class, 'add_location']);
 Route::post('/Update_location/{location_id}', [ApiController::class, 'Update_location']);
 Route::post('/Add_location_atribute', [ApiController::class, 'Add_location_atribute']);
 Route::post('/edit_asset', [ApiController::class, 'edit_asset'])->middleware(['scope:api-edit_asset']);
-
-
 Route::post('/add_asset', [ApiController::class, 'add_asset'])->middleware(['scope:api-add_asset']);;
 Route::post('/add_child_asset', [ApiController::class, 'add_child_asset']);
 Route::post('/asset_type_attr', [ApiController::class, 'asset_type_attribute']);
-
 Route::post('/add_asset_attribute', [ApiController::class, 'add_asset_attribute']);
-
 Route::post('/changepassword', [ApiController::class, 'changepassword'])->middleware(['scope:api-changepassword']);
-
-
 Route::post('/global_search_home', [ApiController::class, 'global_search_home'])->middleware(['scope:api-global_search_home']);
-
 Route::post('/update_asset_details', [ApiController::class, 'update_asset_details'])->middleware(['scope:api-update_asset_details']);
-
 Route::post('/Forgot_Password_phone', [ApiController::class, 'Forgot_Password_phone'])->middleware(['scope:api-Forgot_Password_phone']);
 Route::get('/asset_child_details/{id}', [ApiController::class, 'asset_child_details']);
 Route::post('/child_sat_dynamic', [ApiController::class, 'child_sat_dynamic']);
@@ -111,17 +96,10 @@ Route::get('/get_asset_static_attribute/{asset_type}', [ApiController::class, 'g
 
 Route::post('/add_child_asset', [ApiController::class, 'add_child_asset']);
 Route::post('/fetch_asset_by_serialno_toverify', [ApiController::class, 'fetch_asset_by_serialno_toverify']);
-//Route::post('/asset_getall', [Add_asset::class, 'asset_getall']);
+
 Route::post('/notification_mail', [MailController::class, 'sendMessage']);
 Route::post('/upload_site_media', [ApiController::class, 'site_video']);
 Route::post('/getsite_media', [ApiController::class, 'getsite_media']);
 Route::post('/fetch_by_barcode', [CommonController::class, 'fetch_asset_by_barcode']);
 });
 Route::post('/refreshtoken_login', [ApiController::class, 'loginWithRefreshtoken']);
-
-//Route::post('/deallocate_srn', [Add_STN::class, 'deallocate_srn']);
-
-
-// Route::middleware(['auth:sanctum'])->group(function () {
-//     Route::resource('/home', HomeController::class);
-// });
