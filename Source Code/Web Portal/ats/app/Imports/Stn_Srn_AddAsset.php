@@ -166,6 +166,7 @@ class Stn_Srn_AddAsset implements ToCollection, WithHeadingRow
 					AssetHistoryModel::create(['movein_date' => Carbon::now(), 'status' => 1,'asset_id'=>$asset_id,'location_id'=> intval($location_id)]);
 				   } 
 					for($i=0; $i < $attr_size_add_asset; $i++){
+						if(isset($assetdata['atribute'.$i + 1])){
 						$asset_type_attribute_master_id = Asset_type_attribute_master_model::where('ata_asset_type_attribute_name', $assetdata['atribute'.$i + 1])->value('ata_asset_type_attribute_id');
 						/*$ata_asset_type_id = Asset_type_attribute_master_model::where('ata_asset_type_attribute_name', $collection['atribute'.$i + 1])->value('ata_asset_type_id');
 						$at_asset_type_name = "";
@@ -184,6 +185,7 @@ class Stn_Srn_AddAsset implements ToCollection, WithHeadingRow
 								'at_asset_attribute_name' => $assetdata['atribute'.$i + 1],								                   
 							]);	
 						}
+					 }
 					}
 				}
 			}

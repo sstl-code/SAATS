@@ -701,4 +701,20 @@ ALTER TABLE ONLY "ats"."t_user_location" ADD CONSTRAINT "t_user_location_ul_loca
 ALTER TABLE ONLY "ats"."t_user_task" ADD CONSTRAINT "t_user_task_ut_asset_id_fkey" FOREIGN KEY (ut_asset_id) REFERENCES t_asset(ta_asset_id) NOT DEFERRABLE;
 ALTER TABLE ONLY "ats"."t_user_task" ADD CONSTRAINT "t_user_task_ut_location_id_fkey" FOREIGN KEY (ut_location_id) REFERENCES t_location(tl_location_id) NOT DEFERRABLE;
 
+CREATE OR REPLACE FUNCTION ats.lat_long(lat numeric, long numeric, radius numeric)
+ RETURNS SETOF ats.t_location
+ LANGUAGE plpgsql
+ AS $function$
+        BEGIN
+            RETURN QUERY EXECUTE format(
+                'SELECT * FROM ats.t_location
+                    WHERE earth_distance(
+                          ll_to_earth(tl_location_latitude::decimal, tl_location_longitude::decimal),
+                           ll_to_earth(%s, %s)
+                            ) / 1000 < %s',
+                        lat, long, radius
+                              );
+        END;
+$function$
+;
 -- 2024-06-21 12:01:29.618317+05:30
