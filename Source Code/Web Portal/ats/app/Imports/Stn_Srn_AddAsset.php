@@ -81,6 +81,8 @@ class Stn_Srn_AddAsset implements ToCollection, WithHeadingRow
 		// Add Asset Batch Code
 		if(!empty($assetcollections)){
 			foreach($assetcollections as $assetdata){
+				if(isset($assetdata['manufacturer_serial_no']))
+				{
 				$fartoats = FarToAts::select('id')->where('f2a_manufacture_serial_no', $assetdata['manufacturer_serial_no'])->where('f2a_status', 'Received')->Where('f2a_type',$assetdata['activity'])->get();
 				$location_id = Location::where('tl_location_code', $assetdata['site_id'])->value('tl_location_id');
 				$tl_location_type = Location::where('tl_location_code', $assetdata['site_id'])->value('tl_location_type');
@@ -89,28 +91,27 @@ class Stn_Srn_AddAsset implements ToCollection, WithHeadingRow
 				$at_asset_type_code = Asset_type_model::where('at_asset_type_name', $assetdata['asset_type'])->value('at_asset_type_code');
 				$assetdata['parent_serial_no']=!empty($assetdata['parent_serial_no']) ? $assetdata['parent_serial_no'] :0;
 				$asset_parent_id = asset::where('ta_asset_manufacture_serial_no', $assetdata['parent_serial_no'])->value('ta_asset_id');
-				$asset_type = Asset_type_model::where('at_asset_type_name', $assetdata['asset_type'])->value('at_asset_type_id');
+				$asset_type = Asset_type_model::where('at_asset_type_name',trim($assetdata['asset_type']))->value('at_asset_type_id');
 				$op_id = Operator::where('op_operator_name', $assetdata['operator_name'])->value('op_id');
 				$asset_id = asset::where('ta_asset_manufacture_serial_no', $assetdata['manufacturer_serial_no'])->value('ta_asset_id');
 				$asset_category = Asset_type_model::where('at_asset_type_name', $assetdata['asset_type'])->value('at_asset_type_category');
 				$asset_category_details = Asset_type_model::where('at_asset_type_name', $assetdata['asset_type'])->first();
 				$reason = "";
 				$status = "";
-				//if(empty($location_id)){
-			//		$reason = "Site Does Not Exist";
-			//		$status = "Failed";
-				//}
-
+			
 				if(empty($asset_parent_id) && !empty($assetdata['parent_serial_no'])){
 					$reason = "Parent Does Not Exist";
 					$status = "Failed";
-				}else if(count($fartoats->toarray()) > 0){
-					$reason = "Already in Process id - ".$fartoats;
+				}
+				/*else if(count($fartoats->toarray()) > 0){
+					$reason = "Already in Process";
 					$status = "Failed";
-				}else if(empty($asset_type)){
-					$reason = "Asset Type Not Exist";
+				}*/
+				else if(!isset($asset_type)){
+			
+					$reason = " Asset Type Not Exist";
 					$status = "Failed";
-				}else if(!empty($asset_id)){
+				}else if(isset($asset_id)){
 					$reason = "Asset Already Exist In Asset Table";
 					$status = "Failed";
 				}
@@ -168,11 +169,7 @@ class Stn_Srn_AddAsset implements ToCollection, WithHeadingRow
 					for($i=0; $i < $attr_size_add_asset; $i++){
 						if(isset($assetdata['atribute'.$i + 1])){
 						$asset_type_attribute_master_id = Asset_type_attribute_master_model::where('ata_asset_type_attribute_name', $assetdata['atribute'.$i + 1])->value('ata_asset_type_attribute_id');
-						/*$ata_asset_type_id = Asset_type_attribute_master_model::where('ata_asset_type_attribute_name', $collection['atribute'.$i + 1])->value('ata_asset_type_id');
-						$at_asset_type_name = "";
-						if($ata_asset_type_id > 0){
-							$at_asset_type_name = Asset_type_attribute_master_model::where('ata_asset_type_id', $ata_asset_type_id)->value('ata_asset_type_attribute_name');
-						}*/
+					
 						$asset_type_attribute_master_code = Asset_type_attribute_master_model::where('ata_asset_type_attribute_name', $assetdata['atribute'.$i + 1])->value('ata_asset_type_attribute_id');
 						if(!empty($asset_type_attribute_master_id) && !empty($asset_type)){
 							Asset_Attribute::create([					
@@ -188,6 +185,7 @@ class Stn_Srn_AddAsset implements ToCollection, WithHeadingRow
 					 }
 					}
 				}
+			}
 			}
 		}
 		// Add Stn Batch Code

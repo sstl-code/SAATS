@@ -57,8 +57,8 @@ $active = isset($active) ? $active:"";
 <div class="card-body" style="background-color:#EBEFF2; padding-left: 15px;">
   <nav>
     <div class="nav nav-underline" id="myTab" role="tablist">
-    
-		  <button class="nav-link navtabbutton active" id="technician_map" data-bs-toggle="tab" data-bs-target="#mapping" type="button" role="tab" aria-controls="home" aria-selected="false">Technician to Site Mapping</button>
+    	<button class="nav-link navtabbutton active" id="add_site" data-bs-toggle="tab" data-bs-target="#addsite" type="button" role="tab" aria-controls="home" aria-selected="false">Add Site</button>
+		  <button class="nav-link navtabbutton " id="technician_map" data-bs-toggle="tab" data-bs-target="#mapping" type="button" role="tab" aria-controls="home" aria-selected="false">Technician to Site Mapping</button>
 		  <button class="nav-link navtabbutton" id="addasset" data-bs-toggle="tab" data-bs-target="#addassetsrnstn" type="button" role="tab" aria-controls="home" aria-selected="false">Add Asset</button>
       <button class="nav-link navtabbutton" id="addstn" data-bs-toggle="tab" data-bs-target="#addassetstn" type="button" role="tab" aria-controls="home" aria-selected="false">Create STN</button>
       <button class="nav-link navtabbutton" id="addsrn" data-bs-toggle="tab" data-bs-target="#addassetsrn" type="button" role="tab" aria-controls="home" aria-selected="false">Create SRN</button>
@@ -67,8 +67,69 @@ $active = isset($active) ? $active:"";
     </div>
   </nav>
 </div>
-{{-- Tencian mapping to site --}}
+<br />
   <div class="tab-content mx-3 mt-3" id="myTabContent">
+{{-- Add Site --}}
+	<div class="tab-pane fade show scroll_stn" id="addsite" role="tabpanel" aria-labelledby="home-tab">
+            <div class="batchSubDiv col-md-12">
+                <div class="">
+                    <a class="" href="{{asset('assets/excel/ADD_SITES.xlsx')}}" style="border-radius: 0; background-color: #202C55;"><h6>Download Template File</h6></a>
+                </div>
+                
+                <div class="mt-3">
+                  @if(session('error'))
+              <div class="alert alert-danger" id="useraddmessage">
+                  {{ session('error') }}
+              </div>
+              @endif
+              @if(session('success'))
+              <div class="alert alert-success" id="useraddmessage2">
+                  {{ session('success') }}
+              </div>
+                @endif
+                    <form action="{{url('add_site_batch')}}" id='frmAddsite' class="mb-3" method='post' enctype="multipart/form-data">
+                        @csrf
+                        <label for="files"></label>            
+                        <input accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" type="file" id="files_Add_Site" class="stn_file form-control" name="files" onchange="add_location(this.id,'addsitebtn')"><br>
+                        <input type="hidden" id="tab-113" name="activetab" value="addsite">
+                        <input type="hidden" id="task_title" name="task_title" value="ADDSITE"> 
+                        <input type="submit"  class="mb-3" value="Upload" id="addsitebtn" disabled>                    
+                    </form>
+                </div>
+            <div>
+              <h4>Failed Data</h4>
+              <table id="batchtable" class="table table-striped table-borderedn cell-border border table_batch_asset batchcss">
+                
+                <thead class="thead_names" style="position: sticky;top: 0;background:#DEEBF6;">
+                   <tr >
+                      <th>Serial Number</th>
+                      <th>Action</th>
+                      <th>Reason</th>
+                      <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody style="font-size: small;">
+                  
+                   @foreach($AddsiteFailedData as $BatchFailDetails)
+                   <tr class="dataTbltdhight">
+                     <td >{{$BatchFailDetails->f2a_manufacture_serial_no}}</td>
+                     <td>{{$BatchFailDetails->f2a_type}}</td>
+                      <td>{{$BatchFailDetails->f2a_reason}}</td>
+                      <td>{{$BatchFailDetails->created_at}}</td>
+                      
+                      
+                   </tr>
+                
+                  @endforeach
+                   
+                </tbody>
+             </table>
+            </div>
+
+                
+            </div>       
+    </div>
+{{-- Techncian mapping to site --}}
 
 	 <div class="tab-pane fade show scroll_stn" id="mapping" role="tabpanel" aria-labelledby="home-tab">
             <div class="batchSubDiv col-md-6">
@@ -124,7 +185,9 @@ $active = isset($active) ? $active:"";
                
             </tbody>
          </table>       
-    </div>
+  </div>
+
+
 	{{-- Add Asset --}}
 	<div class="tab-pane fade show scroll_stn" id="addassetsrnstn" role="tabpanel" aria-labelledby="home-tab">
             <div class="batchSubDiv col-md-12">
@@ -134,12 +197,12 @@ $active = isset($active) ? $active:"";
                 
                 <div class="mt-3">
                   @if(session('error'))
-              <div class="alert alert-danger" id="useraddmessage">
+              <div class="alert alert-danger" id="useraddmessage9">
                   {{ session('error') }}
               </div>
               @endif
               @if(session('success'))
-              <div class="alert alert-success" id="useraddmessage2">
+              <div class="alert alert-success" id="useraddmessage10">
                   {{ session('success') }}
               </div>
                 @endif
@@ -175,8 +238,7 @@ $active = isset($active) ? $active:"";
                      <td>{{$BatchFailDetails->f2a_type}}</td>
                       <td>{{$BatchFailDetails->f2a_reason}}</td>
                       <td>{{$BatchFailDetails->created_at}}</td>
-                      
-                      
+          
                    </tr>
                 
                   @endforeach
@@ -357,7 +419,7 @@ $active = isset($active) ? $active:"";
               <tbody>
                 <tr>
 
-                  <form method="POST" action="http://172.16.200.25:85/public/systemlog"></form>
+                  <form method="POST" action="{{url('systemlog')}}"></form>
                   <input type="hidden" name="_token" value="EpxFW2s4N6323dH9eu7qePmoI7h9Ect84TV49BIX" autocomplete="off">
 
                   <th style="vertical-align: middle; text-align: center;" nowrap="" width="5%">Start Date</th>
@@ -624,33 +686,7 @@ $active = isset($active) ? $active:"";
         },
     });
     }
-//stn
-    // $("#stnVal").click(function(e){
-    //   e.preventDefault();
-    //   if ($(".stn_file").val() != "") {
-    //     $("#stnValfrom").submit();
-    //   }
-    //   return false;
-    // });
-//stn
-//srn
-    // $("#srnVal").click(function(e){
-    //   e.preventDefault();
-    //   if ($(".srn_file").val() != "") {
-    //     $("#srnValfrom").submit();
-    //   }
-    //   return false;
-    // });
-//srn
-// far
-    $("#farVal").click(function(e){
-      e.preventDefault();
-      if ($(".far_file").val() != "") {
-        $("#farValfrom").submit();
-      }
-      return false;
-    });
-// far
+
   </script>
 
 
@@ -664,29 +700,10 @@ $active = isset($active) ? $active:"";
     $('#technician_map').removeClass("active show");
     $('#addasset').removeClass("active show");
     $('#addstn').removeClass("active show");
+    
     $('#addsrn').removeClass("active show");
     $('[data-bs-target="#'+activeTab+'"]').addClass("active");
 
-    // if(activeTab == 'mapping'){
-    //   $('[data-bs-target="#activeTab"]').addClass("active");
-    //   $('#far-tab1').addClass("active show");
-    //   $('[data-bs-target="#far-tab2"]').removeClass("active");
-    //   $('#far-tab2').removeClass("active show");
-      
-    // }
-    //technician_map addasset addstn addsrn
-    
-    // else{
-    //   console.log(activeTab);
-    //   $('[data-bs-target="#far-tab2"]').addClass("active");
-    //   $('#far-tab2').addClass("active show");
-    //   $('[data-bs-target="#far-tab1"]').removeClass("active");
-    //   $('#far-tab1').removeClass("active show");
-      
-    // }
-     
-  
-     
   }
  
   function UserMapping() {
@@ -723,6 +740,23 @@ $active = isset($active) ? $active:"";
   }
 }
 
+ function add_location(fileid,uplbuttonid) {
+  // Get the file input element
+  // var fileInput = document.getElementById("files");
+
+  // Get the "Upload" button element
+  var fileInput = document.getElementById(fileid);
+  var uploadButton = document.getElementById(uplbuttonid);
+  
+  // Check if a file has been selected
+  if (fileInput.files.length > 0) {
+    // Enable the "Upload" button
+    uploadButton.disabled = false;
+  } else {
+    // Disable the "Upload" button if no file is selected
+    uploadButton.disabled = true;
+  }
+}
 setTimeout(() => {
       $('#useraddmessage').remove();
       $('#useraddmessage1').remove();
@@ -732,11 +766,9 @@ setTimeout(() => {
       $('#useraddmessage6').remove();
       $('#useraddmessage7').remove();
       $('#useraddmessage8').remove();
+      $('#useraddmessage9').remove();
+      $('#useraddmessage10').remove();
      }, 6000);
-   
-     
-
-
 
   //javascript:document.getElementById('UserMap').disabled=false
 </script>

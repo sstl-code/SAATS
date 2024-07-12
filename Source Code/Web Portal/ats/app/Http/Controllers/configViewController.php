@@ -37,6 +37,7 @@ class configViewController extends Controller
 
 
                 $fixedatrname=DB::connection('pgsql')->table("product.t_location_attribute_master")->select('la_location_type_id','la_location_attribute_name')->get();
+                $config_dynamic_attribute=DB::connection('pgsql')->table("product.t_location_attribute_master")->select('la_location_attribute_id', 'la_location_attribute_location_type','la_location_attribute_name', 'la_location_attribute_description', 'la_location_attribute_datatype','la_flov', 'la_location_attribute_mandatory_flag', 'la_location_attribute_default_value', 'la_display', 'la_editable','la_status','la_requiered_not_required_flag')->where('la_location_attribute_mandatory_flag', 'NOT REQUIRED')
                 ->where('la_location_attribute_location_type','!=',0)
                 ->get();
 

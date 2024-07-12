@@ -169,5 +169,4 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/forgot_password',[forgotPassView::class, 'index']);
 Route::get('/logout', [login::class, 'logout']);
 Route::post('authorize_user', [login::class, 'LoginfromuserMgmt']);
-Route::get('/testingweb',[testdb::class, 'index']);
 Route::get('/generate_output_file', [Report_View_Controller::class, 'generateOutputFile']);

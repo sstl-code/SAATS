@@ -32,15 +32,16 @@ class batch_process extends Controller
 	public function index()
 	{
 		if (empty(Session::get('active_tab'))) {
-			Session::put('active_tab', 'mapping');
+			Session::put('active_tab', 'addsite');
 		}
 		$BatchFailedData = FarToAts::where('f2a_status', 'Failed')->where('f2a_type', 'ADDASSET')->latest('id')->get();
 		$BatchFailedDataStn = FarToAts::where('f2a_status', 'Failed')->where('f2a_type', 'STN')->latest('id')->get();
 		$BatchFailedDataSrn = FarToAts::where('f2a_status', 'Failed')->where('f2a_type', 'SRN')->latest('id')->get();
+	    $AddsiteFailedData=FarToAts::where('f2a_status', 'Failed')->where('f2a_type', 'ADDSITE')->latest('id')->get();
 		$Techfaileddata = User_Location_Model::where('status', 'Failed')->get();
 
 		$data = Report::where('is_active', 1)->get();
-		return view('batch_upload', compact('BatchFailedData', 'Techfaileddata', 'BatchFailedDataStn', 'BatchFailedDataSrn', 'data'));
+		return view('batch_upload', compact('BatchFailedData', 'Techfaileddata', 'BatchFailedDataStn', 'BatchFailedDataSrn','AddsiteFailedData', 'data'));
 	}
 	public function location_user_mapping(Request $request)
 	{
@@ -98,14 +99,14 @@ class batch_process extends Controller
 
 		]);
 		if ($validator->fails()) {
-			return redirect('/batch_upload')->with('error1', 'An error occurred while uploading file');
+			return redirect('/batch_upload')->with('error', 'An error occurred while uploading file');
 		} else {
 			$file = $request->file('files');
 			$file_name = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
 			$file->move(base_path() . '/batchProcessfile/', $file_name);
 			$uploadfile = base_path() . '/batchProcessfile/' . $file_name;
 			$data = Excel::import(new Site_Add, $uploadfile);
-			return redirect('/batch_upload')->with('success1', 'File uploaded successfully');
+			return redirect('/batch_upload')->with('success', 'File uploaded successfully');
 		}
 	}
 }

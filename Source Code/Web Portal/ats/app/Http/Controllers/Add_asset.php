@@ -11,72 +11,63 @@ class Add_asset extends Controller
 {
     public function store(Request $request)
     {
-        //dd($request->fields);
-        //Log::info($request);
         $fields = json_decode($request->fields);
-        //dd($fields);
+        
         $static_attribute = $fields->static_attribute;
-        //dd($static_attribute);
+        
         $asset_type_name = strtoupper($static_attribute->asset_type_name);
-        //dd($asset_type_name);
+      
         $at_asset_type_id = DB::table('product.t_asset_type_master')->where(DB::raw('upper(at_asset_type_name)'),$asset_type_name)->get(['at_asset_type_id']); 
-        //dd($at_asset_type_id);
+       
         $at_asset_type_code = DB::table('product.t_asset_type_master')->where(DB::raw('upper(at_asset_type_name)'),$asset_type_name)->get(['at_asset_type_code']);
         $at_asset_type_description = DB::table('product.t_asset_type_master')->where(DB::raw('upper(at_asset_type_name)'),$asset_type_name)->get(['at_asset_type_description']);      
     
         $at_asset_type_id = $at_asset_type_id[0]->at_asset_type_id;
-        //dd($at_asset_type_id);
+       
         $at_asset_type_code = $at_asset_type_code[0]->at_asset_type_code;
         $at_asset_type_description = $at_asset_type_description[0]->at_asset_type_description;
         $at_asset_type_attribute_code = DB::table('product.t_asset_type_attribute_master')->where('ata_asset_type_id',$at_asset_type_id)->first();
-        //dd($at_asset_type_attribute_code);
         $at_asset_type_attribute_code = $at_asset_type_attribute_code->ata_asset_type_attribute_code;
         
-        //dd($at_asset_type_id,$at_asset_type_code,$at_asset_type_description);
-        //var_dump(json_decode(static_attribute));
         $file = $request->file('asset_image');
 
       if(isset($file)==true){
         $file_name = $file->getClientOriginalName();
-        //dd(base_path());
+       
         $file->move(base_path().'/assetimage/', $file_name);
         $tagimage = base_path().'/assetimage/'.$file_name;
-        //dd($tagimage);
+       
         $tagimagearray =(explode("/",$tagimage));
-        //dd($tagimagearray);
+    
         $app_url = env('APP_URL');
         $app_urlarray =(explode("/",$app_url));
-        //dd($app_urlarray);
+
         $app_urlfinal =  $app_urlarray[0]."/".$app_urlarray[1]."/".$app_urlarray[2]."/".$app_urlarray[3]; 
-        //dd($app_urlfinal);
+     
         $tagimagefinal = $app_urlfinal."/".$tagimagearray[5]."/".$tagimagearray[6]; 
-        //dd($tagimagefinal);
-        //dd($static_attribute->asset_manufacture_serial_no);
+      
     }else{
         $tagimagefinal = null;
 
     }
         
         
-       //$at_asset_type_id=DB::table('product.t_asset_type_master')->where('at_asset_type_name',$asset_type_name)->first(['at_asset_type_id']);
-
+  
         $asset_manufacture_serial_no_exists = DB::table('ats.t_asset')
-        //->select('ta_asset_manufacture_serial_no')
+  
         ->where('ta_asset_manufacture_serial_no',$static_attribute->asset_manufacture_serial_no)
-        //->where('ta_asset_type_code',$static_attribute->asset_manufacture_serial_no)
-        ->where('ta_effective_end_date', null)
+         ->where('ta_effective_end_date', null)
         ->first();
         $asset_manufacture_serial_no = $asset_manufacture_serial_no_exists==null?null:$asset_manufacture_serial_no_exists->ta_asset_manufacture_serial_no;
         $ta_asset_location_id =  $asset_manufacture_serial_no_exists==null?null:$asset_manufacture_serial_no_exists->ta_asset_location_id;
-        //dd($asset_manufacture_serial_no);
-
+   
         $asset_id = DB::table('ats.t_asset')
         ->select('ta_asset_id')
         ->where('ta_asset_manufacture_serial_no',$static_attribute->asset_manufacture_serial_no)
         ->where('ta_effective_end_date', null)
         ->first();
         $asset_id = $asset_id==null?null:$asset_id->ta_asset_id;
-        //dd($asset_id);
+       
         
         if($asset_manufacture_serial_no==''){
             return response()->json([
@@ -92,7 +83,7 @@ class Add_asset extends Controller
             ]);
                 
         }
-        //dd($ta_asset_location_id!=null);
+        
 
         if(($asset_manufacture_serial_no!='') && ($ta_asset_location_id==null)){
 
