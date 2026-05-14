@@ -14,9 +14,7 @@ abstract class AuthRepo {
 @Injectable(as: AuthRepo)
 class Auth extends AuthRepo {
   final RetrofitClient authClient;
-  Auth({
-    required this.authClient,
-  });
+  Auth({required this.authClient});
 
   @override
   Future<GetOtpResponseModel> getOtp(GetOtp request) async {
@@ -30,7 +28,8 @@ class Auth extends AuthRepo {
 
   @override
   Future<UpdatePasswordResponseModel> updatePassword(
-      UpdatePassword request) async {
+    UpdatePassword request,
+  ) async {
     return await authClient.updatePassword(request.data);
   }
 }

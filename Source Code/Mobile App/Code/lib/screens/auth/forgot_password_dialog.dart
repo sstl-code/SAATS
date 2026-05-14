@@ -110,10 +110,13 @@ class _ForgotPasswordDialogState extends State<ForgotPasswordDialog> {
                             _otpController = TextEditingController();
                             _newPwController = TextEditingController();
                             _confirmPwController = TextEditingController();
-                            context.read<AuthBloc>().add(AuthEvent.getOtp(
+                            context.read<AuthBloc>().add(
+                              AuthEvent.getOtp(
                                 GetOtpRequestModel(
-                                    email:
-                                        _userIdController.text.toLowerCase())));
+                                  email: _userIdController.text.toLowerCase(),
+                                ),
+                              ),
+                            );
                           }
                         : null,
                     child: (state is GetOtpStateLoading)
@@ -172,10 +175,14 @@ class _ForgotPasswordDialogState extends State<ForgotPasswordDialog> {
               child: ElevatedButton(
                 onPressed: _isOtpLengthValid
                     ? () {
-                        context.read<AuthBloc>().add(AuthEvent.validateOtp(
+                        context.read<AuthBloc>().add(
+                          AuthEvent.validateOtp(
                             ValidateOtpRequestModel(
-                                email: _userIdController.text.toLowerCase(),
-                                otp: _otpController.text)));
+                              email: _userIdController.text.toLowerCase(),
+                              otp: _otpController.text,
+                            ),
+                          ),
+                        );
                       }
                     : null,
                 child: BlocConsumer<AuthBloc, AuthState>(
@@ -186,8 +193,9 @@ class _ForgotPasswordDialogState extends State<ForgotPasswordDialog> {
                           _enablePasswordFields = true;
                           Future.delayed(Duration(milliseconds: 500), () {
                             setState(() {
-                              FocusScope.of(context)
-                                  .requestFocus(_newPasswordFocusNode);
+                              FocusScope.of(
+                                context,
+                              ).requestFocus(_newPasswordFocusNode);
                             });
                           });
                         });
@@ -222,18 +230,20 @@ class _ForgotPasswordDialogState extends State<ForgotPasswordDialog> {
                 focusNode: _newPasswordFocusNode,
                 key: const Key('newPassword'),
                 decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  hintText: 'Password',
+                  label: Text('New Password'),
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() => _isNewVisible = !_isNewVisible);
+                    },
+                    icon: Icon(
+                      _isNewVisible ? Icons.visibility_off : Icons.visibility,
                     ),
-                    hintText: 'Password',
-                    label: Text('New Password'),
-                    suffixIcon: IconButton(
-                        onPressed: () {
-                          setState(() => _isNewVisible = !_isNewVisible);
-                        },
-                        icon: Icon(_isNewVisible
-                            ? Icons.visibility_off
-                            : Icons.visibility))),
+                  ),
+                ),
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -254,19 +264,22 @@ class _ForgotPasswordDialogState extends State<ForgotPasswordDialog> {
                 controller: _confirmPwController,
                 key: const Key('confirmPassword'),
                 decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  hintText: 'Password',
+                  label: Text('Confirm Password'),
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() => _isConfirmVisible = !_isConfirmVisible);
+                    },
+                    icon: Icon(
+                      _isConfirmVisible
+                          ? Icons.visibility_off
+                          : Icons.visibility,
                     ),
-                    hintText: 'Password',
-                    label: Text('Confirm Password'),
-                    suffixIcon: IconButton(
-                        onPressed: () {
-                          setState(
-                              () => _isConfirmVisible = !_isConfirmVisible);
-                        },
-                        icon: Icon(_isConfirmVisible
-                            ? Icons.visibility_off
-                            : Icons.visibility))),
+                  ),
+                ),
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -287,12 +300,15 @@ class _ForgotPasswordDialogState extends State<ForgotPasswordDialog> {
                   onPressed: _enablePasswordFields
                       ? () {
                           if (_formKey.currentState?.validate() == true) {
-                            context.read<AuthBloc>().add(AuthEvent
-                                .updatePassword(UpdatePasswordRequestModel(
-                                    email: _userIdController.text.toLowerCase(),
-                                    newPassword: _newPwController.text,
-                                    confrimpassword:
-                                        _confirmPwController.text)));
+                            context.read<AuthBloc>().add(
+                              AuthEvent.updatePassword(
+                                UpdatePasswordRequestModel(
+                                  email: _userIdController.text.toLowerCase(),
+                                  newPassword: _newPwController.text,
+                                  confrimpassword: _confirmPwController.text,
+                                ),
+                              ),
+                            );
                             print('All fields are valid. Do something...');
                           }
                         }

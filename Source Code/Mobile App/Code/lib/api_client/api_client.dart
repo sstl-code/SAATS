@@ -18,13 +18,14 @@ class CustomRequest {
   dynamic body;
   Map<String, dynamic>? multiPart;
 
-  CustomRequest(
-      {required this.url,
-      required this.urlName,
-      this.params,
-      this.headers,
-      this.body,
-      this.multiPart});
+  CustomRequest({
+    required this.url,
+    required this.urlName,
+    this.params,
+    this.headers,
+    this.body,
+    this.multiPart,
+  });
 
   @override
   String toString() {
@@ -37,8 +38,11 @@ class CustomResponse {
   String message;
   dynamic result;
 
-  CustomResponse(
-      {required this.statusCode, required this.message, required this.result});
+  CustomResponse({
+    required this.statusCode,
+    required this.message,
+    required this.result,
+  });
 
   @override
   String toString() {
@@ -90,17 +94,21 @@ class HttpServiceImpl implements BaseHttpService {
   }
 
   Future<dynamic> _responseService(
-      CustomRequest request, RequestType requestType) async {
+    CustomRequest request,
+    RequestType requestType,
+  ) async {
     return internetConnection.isInternetConnected().then((isConnected) async {
       final Map<String, String> jsonHeaders = {
-        'content-type': 'application/json'
+        'content-type': 'application/json',
       };
       if (isConnected) {
         try {
           Uri uri = Uri.parse(request.url);
           dynamic body = request.body;
-          LogUtil.logPrint('URL DETAILS',
-              '========================================================');
+          LogUtil.logPrint(
+            'URL DETAILS',
+            '========================================================',
+          );
           LogUtil.logPrint('Request Body', body);
           LogUtil.logPrint('Request Param', request.params);
           Uri url = uri.replace(queryParameters: request.params);
@@ -116,59 +124,78 @@ class HttpServiceImpl implements BaseHttpService {
               Response response = await put(url, headers: headers, body: body);
               return _checkResponseStatus(response, request.urlName);
             case RequestType.delete:
-              Response response =
-                  await delete(url, headers: headers, body: body);
+              Response response = await delete(
+                url,
+                headers: headers,
+                body: body,
+              );
               return _checkResponseStatus(response, request.urlName);
             case RequestType.multiPart:
               MultipartRequest multipartRequest = MultipartRequest('POST', uri);
               headers.forEach(
-                  (key, value) => multipartRequest.headers[key] = value);
-              multipartRequest.fields['fields'] =
-                  jsonEncode(request.multiPart!['fields']);
+                (key, value) => multipartRequest.headers[key] = value,
+              );
+              multipartRequest.fields['fields'] = jsonEncode(
+                request.multiPart!['fields'],
+              );
               await addFilesToRequest(
-                  multipartRequest, request.multiPart!['files']);
+                multipartRequest,
+                request.multiPart!['files'],
+              );
               LogUtil.logPrint('Request Multipart', request.multiPart);
 
-              Response response =
-                  await Response.fromStream(await multipartRequest.send());
+              Response response = await Response.fromStream(
+                await multipartRequest.send(),
+              );
               return _checkResponseStatus(response, request.urlName);
             default:
               return CustomResponse(
-                  statusCode: 000,
-                  message: "${request.urlName}Exception",
-                  result: null);
+                statusCode: 000,
+                message: "${request.urlName}Exception",
+                result: null,
+              );
           }
         } on SocketException {
           ToastMessage.showMessage('Connection time out', kToastErrorColor);
           return CustomResponse(
-              statusCode: 000, message: 'Connection time out', result: null);
+            statusCode: 000,
+            message: 'Connection time out',
+            result: null,
+          );
         } catch (e) {
           LogUtil.logPrint('responseServiceException', e.toString());
           return CustomResponse(
-              statusCode: 000,
-              message: '${request.urlName}Exception',
-              result: e.toString());
+            statusCode: 000,
+            message: '${request.urlName}Exception',
+            result: e.toString(),
+          );
         }
       } else {
         ToastMessage.showMessage(
-            Constants.checkInternetConnection, kToastErrorColor);
+          Constants.checkInternetConnection,
+          kToastErrorColor,
+        );
         return CustomResponse(
-            statusCode: 499,
-            message: Constants.checkInternetConnection,
-            result: null);
+          statusCode: 499,
+          message: Constants.checkInternetConnection,
+          result: null,
+        );
       }
     });
   }
 
   Future<void> addFilesToRequest(
-      MultipartRequest request, List<Map<String, String>> data) async {
+    MultipartRequest request,
+    List<Map<String, String>> data,
+  ) async {
     for (Map<String, String> myMap in data) {
       myMap.forEach((key, value) async {
         File file = File(value);
         if (file.existsSync()) {
           List<int> fileBytes = await file.readAsBytes();
-          request.files
-              .add(MultipartFile.fromBytes(key, fileBytes, filename: value));
+          request.files.add(
+            MultipartFile.fromBytes(key, fileBytes, filename: value),
+          );
         }
       });
     }
@@ -178,92 +205,110 @@ class HttpServiceImpl implements BaseHttpService {
     LogUtil.logPrint('Request Method', response.request?.method);
     LogUtil.logPrint('${urlName}Url', response.request?.url);
     LogUtil.logPrint('${urlName}Response', response.statusCode);
-    LogUtil.logPrint('URL DETAILS',
-        '========================================================');
+    LogUtil.logPrint(
+      'URL DETAILS',
+      '========================================================',
+    );
     LogUtil.logPrint('${urlName}Response', response.body);
     try {
       switch (response.statusCode) {
         case SUCCESS_RESPONSE_CODE:
           return CustomResponse(
-              statusCode: SUCCESS_RESPONSE_CODE,
-              message: "OK",
-              result: jsonDecode(utf8.decode(response.bodyBytes)));
+            statusCode: SUCCESS_RESPONSE_CODE,
+            message: "OK",
+            result: jsonDecode(utf8.decode(response.bodyBytes)),
+          );
         case 400:
           return CustomResponse(
-              statusCode: 400,
-              message: "Bad request",
-              result: jsonDecode(response.body));
+            statusCode: 400,
+            message: "Bad request",
+            result: jsonDecode(response.body),
+          );
         case 401:
           ToastMessage.showMessage("Unauthorized", kToastErrorColor);
 
           return CustomResponse(
-              statusCode: 401,
-              message: "Unauthorized",
-              result: jsonDecode(response.body));
+            statusCode: 401,
+            message: "Unauthorized",
+            result: jsonDecode(response.body),
+          );
         case 403:
           ToastMessage.showMessage(
-              "You do not have access right for this operation.",
-              kToastErrorColor);
+            "You do not have access right for this operation.",
+            kToastErrorColor,
+          );
           return CustomResponse(
-              statusCode: 403,
-              message: "Forbidden request",
-              result: jsonDecode(response.body));
+            statusCode: 403,
+            message: "Forbidden request",
+            result: jsonDecode(response.body),
+          );
         case 404:
           ToastMessage.showMessage("Not found", kToastErrorColor);
           return CustomResponse(
-              statusCode: 404,
-              message: "Not found",
-              result: jsonDecode(response.body));
+            statusCode: 404,
+            message: "Not found",
+            result: jsonDecode(response.body),
+          );
         case 405:
           ToastMessage.showMessage("Method not allowed", kToastErrorColor);
           return CustomResponse(
-              statusCode: 405,
-              message: "Method not allowed",
-              result: jsonDecode(response.body));
+            statusCode: 405,
+            message: "Method not allowed",
+            result: jsonDecode(response.body),
+          );
         case 415:
           ToastMessage.showMessage(
-              "Media type not supported.", kToastErrorColor);
+            "Media type not supported.",
+            kToastErrorColor,
+          );
           return CustomResponse(
-              statusCode: 415,
-              message: "Media type not supported.",
-              result: jsonDecode(response.body));
+            statusCode: 415,
+            message: "Media type not supported.",
+            result: jsonDecode(response.body),
+          );
         case 423:
           ToastMessage.showMessage("Access denied.", kToastErrorColor);
           return CustomResponse(
-              statusCode: 423,
-              message: "Access denied.",
-              result: jsonDecode(response.body));
+            statusCode: 423,
+            message: "Access denied.",
+            result: jsonDecode(response.body),
+          );
         case 500:
           ToastMessage.showMessage("Internal server error", kToastErrorColor);
           return CustomResponse(
-              statusCode: 500,
-              message: "Internal server error",
-              result: jsonDecode(response.body));
+            statusCode: 500,
+            message: "Internal server error",
+            result: jsonDecode(response.body),
+          );
         case 503:
           ToastMessage.showMessage("Service unavailable", kToastErrorColor);
           return CustomResponse(
-              statusCode: 503,
-              message: "Service unavailable",
-              result: jsonDecode(response.body));
+            statusCode: 503,
+            message: "Service unavailable",
+            result: jsonDecode(response.body),
+          );
         default:
           ToastMessage.showMessage("Unknown request", kToastErrorColor);
           return CustomResponse(
-              statusCode: response.statusCode,
-              message: "Unknown request",
-              result: jsonDecode(response.body));
+            statusCode: response.statusCode,
+            message: "Unknown request",
+            result: jsonDecode(response.body),
+          );
       }
     } on FormatException catch (fc) {
       LogUtil.logPrint('formatException', fc.toString());
       return CustomResponse(
-          statusCode: response.statusCode,
-          message: "OK",
-          result: response.body);
+        statusCode: response.statusCode,
+        message: "OK",
+        result: response.body,
+      );
     } catch (e) {
       LogUtil.logPrint('formatException', e.toString());
       return CustomResponse(
-          statusCode: response.statusCode,
-          message: "OK",
-          result: response.body);
+        statusCode: response.statusCode,
+        message: "OK",
+        result: response.body,
+      );
     }
   }
 }

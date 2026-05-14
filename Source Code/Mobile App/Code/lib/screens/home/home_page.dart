@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:ats_system/core/session_manager/session_manager.dart';
-import 'package:ats_system/core/utlis/permission_manager.dart';
+import 'package:ats_system/core/utils/permission_manager.dart';
 import 'package:ats_system/main.dart';
 import 'package:ats_system/main_provider.dart';
 import 'package:ats_system/models/site_model.dart';
@@ -55,14 +55,15 @@ class _HomePageState extends State<HomePage> {
         if (Platform.isAndroid) {
           showPermissionRequiredDialog(context, locationPermissionMessage);
         } else if (Platform.isIOS) {
-          context
-              .showSnackBar("Please allow location permission from settings");
+          context.showSnackBar(
+            "Please allow location permission from settings",
+          );
         }
       },
       onPermissionGranted: () {
-        context
-            .read<HomeProvider>()
-            .fetchHomeNearBySites(_distance.toStringAsFixed(2));
+        context.read<HomeProvider>().fetchHomeNearBySites(
+          _distance.toStringAsFixed(2),
+        );
       },
       onPermissionDenied: () {
         context.showSnackBar("Please allow location permission");
@@ -78,59 +79,63 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: bgColor,
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-            title: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(Strings.appBarHome),
-                      Selector<HomeProvider, LocationData?>(
-                        selector: (_, p) => p.data,
-                        builder: (_, d, c) => d == null
-                            ? Container()
-                            : Text(
-                                '(Lat:${d.latitude?.toStringAsFixed(4)}, Lng:${d.longitude?.toStringAsFixed(4)})',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontStyle: FontStyle.italic,
-                                    fontSize: 13),
+          title: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(Strings.appBarHome),
+                    Selector<HomeProvider, LocationData?>(
+                      selector: (_, p) => p.data,
+                      builder: (_, d, c) => d == null
+                          ? Container()
+                          : Text(
+                              '(Lat:${d.latitude?.toStringAsFixed(4)}, Lng:${d.longitude?.toStringAsFixed(4)})',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.normal,
+                                fontStyle: FontStyle.italic,
+                                fontSize: 13,
                               ),
+                            ),
+                    ),
+                  ],
+                ),
+              ),
+              Visibility(
+                visible: false,
+                child: Flexible(
+                  fit: FlexFit.tight,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          elevation: 5,
+                          backgroundColor: Colors.white,
+                          foregroundColor: kPrimaryColor,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 5,
+                          ),
+                          minimumSize: Size.zero,
+                        ),
+                        onPressed: () => Navigator.pushNamed(
+                          context,
+                          ViewMapScreen.routeName,
+                        ),
+                        child: const Text(viewMap),
                       ),
                     ],
                   ),
                 ),
-                Visibility(
-                  visible: false,
-                  child: Flexible(
-                    fit: FlexFit.tight,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            elevation: 5,
-                            backgroundColor: Colors.white,
-                            foregroundColor: kPrimaryColor,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 5),
-                            minimumSize: Size.zero,
-                          ),
-                          onPressed: () => Navigator.pushNamed(
-                            context,
-                            ViewMapScreen.routeName,
-                          ),
-                          child: const Text(viewMap),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              ],
-            ),
-            elevation: 5),
+              ),
+            ],
+          ),
+          elevation: 5,
+        ),
         drawer: const CustomNavigationDrawer(),
         body: Consumer<HomeProvider>(
           builder: (context, provider, child) {
@@ -156,12 +161,15 @@ class _HomePageState extends State<HomePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 10.0),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10.0,
+                            ),
                             child: Row(
                               children: [
-                                const Text('1 KM',
-                                    style: TextStyle(fontSize: 10)),
+                                const Text(
+                                  '1 KM',
+                                  style: TextStyle(fontSize: 10),
+                                ),
                                 Expanded(
                                   child: Slider(
                                     min: 1,
@@ -177,20 +185,24 @@ class _HomePageState extends State<HomePage> {
                                     },
                                   ),
                                 ),
-                                const Text('100 KM',
-                                    style: TextStyle(fontSize: 10)),
+                                const Text(
+                                  '100 KM',
+                                  style: TextStyle(fontSize: 10),
+                                ),
                               ],
                             ),
                           ),
                           const SizedBox(height: 10),
                           SiteTypeWidget(
-                              isNearBy: true,
-                              title: Strings.nearBySites,
-                              list: provider.homeNearBySiteList),
+                            isNearBy: true,
+                            title: Strings.nearBySites,
+                            list: provider.homeNearBySiteList,
+                          ),
                           const SizedBox(height: 10),
                           SiteTypeWidget(
-                              title: Strings.mySites,
-                              list: provider.mySiteList),
+                            title: Strings.mySites,
+                            list: provider.mySiteList,
+                          ),
                         ],
                       ),
                     ),
@@ -206,12 +218,12 @@ class _HomePageState extends State<HomePage> {
 }
 
 class SiteTypeWidget extends StatelessWidget {
-  const SiteTypeWidget(
-      {Key? key,
-      required this.title,
-      required this.list,
-      this.isNearBy = false})
-      : super(key: key);
+  const SiteTypeWidget({
+    Key? key,
+    required this.title,
+    required this.list,
+    this.isNearBy = false,
+  }) : super(key: key);
   final String title;
   final List<SiteData> list;
   final bool isNearBy;
@@ -219,15 +231,11 @@ class SiteTypeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(0.0),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.0)),
       color: scaffoldBackgroundColor,
       elevation: 2.0,
       child: ClipRRect(
-        borderRadius: BorderRadius.all(
-          Radius.circular(0.0),
-        ),
+        borderRadius: BorderRadius.all(Radius.circular(0.0)),
         child: Container(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -238,21 +246,19 @@ class SiteTypeWidget extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(title,
-                        style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w900,
-                            color: kPrimaryColor)),
-                    SizedBox(
-                      height: 10,
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w900,
+                        color: kPrimaryColor,
+                      ),
                     ),
+                    SizedBox(height: 10),
                   ],
                 ),
               ),
-              SitesWidget(
-                siteList: list,
-                isNearBy: isNearBy,
-              ),
+              SitesWidget(siteList: list, isNearBy: isNearBy),
             ],
           ),
         ),
@@ -263,7 +269,7 @@ class SiteTypeWidget extends StatelessWidget {
 
 class SitesWidget extends StatelessWidget {
   const SitesWidget({Key? key, required this.siteList, this.isNearBy = false})
-      : super(key: key);
+    : super(key: key);
 
   final List<SiteData> siteList;
   final bool isNearBy;
@@ -271,52 +277,50 @@ class SitesWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return (isNearBy)
-        ? Consumer<HomeProvider>(builder: (context, provider, child) {
-            if (provider.isHomeNearSiteLoading)
-              return Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: ProgressBar(),
-              );
-            else {
-              if (provider.homeNearBySiteList.isEmpty) {
-                return Container(
-                  width: double.infinity,
-                  child: Padding(
-                    padding: const EdgeInsets.all(50.0),
-                    child: Align(child: Text('No Nearby Sites Found!')),
-                  ),
+        ? Consumer<HomeProvider>(
+            builder: (context, provider, child) {
+              if (provider.isHomeNearSiteLoading)
+                return Padding(
+                  padding: const EdgeInsets.all(50.0),
+                  child: ProgressBar(),
                 );
-              } else {
-                return Datatable(
-                  siteList: siteList,
-                  isNearBy: isNearBy,
-                );
+              else {
+                if (provider.homeNearBySiteList.isEmpty) {
+                  return Container(
+                    width: double.infinity,
+                    child: Padding(
+                      padding: const EdgeInsets.all(50.0),
+                      child: Align(child: Text('No Nearby Sites Found!')),
+                    ),
+                  );
+                } else {
+                  return Datatable(siteList: siteList, isNearBy: isNearBy);
+                }
               }
-            }
-          })
-        : Consumer<HomeProvider>(builder: (context, provider, child) {
-            if (provider.isMySiteLoading)
-              return Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: ProgressBar(),
-              );
-            else {
-              if (provider.mySiteList.isEmpty) {
-                return Container(
-                  width: double.infinity,
-                  child: Padding(
-                    padding: const EdgeInsets.all(50.0),
-                    child: Align(child: Text('No Sites Found!')),
-                  ),
+            },
+          )
+        : Consumer<HomeProvider>(
+            builder: (context, provider, child) {
+              if (provider.isMySiteLoading)
+                return Padding(
+                  padding: const EdgeInsets.all(50.0),
+                  child: ProgressBar(),
                 );
-              } else {
-                return Datatable(
-                  siteList: siteList,
-                  isNearBy: isNearBy,
-                );
+              else {
+                if (provider.mySiteList.isEmpty) {
+                  return Container(
+                    width: double.infinity,
+                    child: Padding(
+                      padding: const EdgeInsets.all(50.0),
+                      child: Align(child: Text('No Sites Found!')),
+                    ),
+                  );
+                } else {
+                  return Datatable(siteList: siteList, isNearBy: isNearBy);
+                }
               }
-            }
-          });
+            },
+          );
   }
 }
 
@@ -329,49 +333,56 @@ class Datatable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<DataRow> rows = siteList
-        .map((e) => DataRow(
-                color: MaterialStateProperty.resolveWith((states) {
-                  return siteList.indexOf(e) % 2 == 0
-                      ? scaffoldBackgroundColor
-                      : white;
-                }),
-                cells: [
-                  DataCell(
-                    Text(
-                      e.tlLocationCode!,
-                      style: const TextStyle(
-                          decoration: TextDecoration.underline,
-                          color: Colors.blue,
-                          decorationColor: Colors.blue,
-                          fontWeight: FontWeight.w500),
-                    ),
-                    onTap: () {
-                      context.read<HomeProvider>().selectedSite = e;
-
-                      if (isNearBy) {
-                        bool isMySite = context
-                            .read<HomeProvider>()
-                            .mySiteList
-                            .any((element) =>
-                                element.tlLocationCode!.trim() ==
-                                e.tlLocationCode!.trim());
-                        !isMySite &&
-                                !locator.get<SessionManager>().isSupervisor()
-                            ? CustomDialogBox.appDialog(
-                                context, NotifySupervisorDialog())
-                            : Navigator.of(context)
-                                .pushNamed(AssetListPage.routeName);
-                      } else {
-                        Navigator.of(context)
-                            .pushNamed(AssetListPage.routeName);
-                      }
-                    },
+        .map(
+          (e) => DataRow(
+            color: MaterialStateProperty.resolveWith((states) {
+              return siteList.indexOf(e) % 2 == 0
+                  ? scaffoldBackgroundColor
+                  : white;
+            }),
+            cells: [
+              DataCell(
+                Text(
+                  e.tlLocationCode!,
+                  style: const TextStyle(
+                    decoration: TextDecoration.underline,
+                    color: Colors.blue,
+                    decorationColor: Colors.blue,
+                    fontWeight: FontWeight.w500,
                   ),
-                  DataCell(Text(e.tlLocationName ?? '')),
-                  DataCell(ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: 450, minWidth: 200),
-                      child: Text(e.tlLocationAddress ?? '', maxLines: 1))),
-                ]))
+                ),
+                onTap: () {
+                  context.read<HomeProvider>().selectedSite = e;
+
+                  if (isNearBy) {
+                    bool isMySite = context.read<HomeProvider>().mySiteList.any(
+                      (element) =>
+                          element.tlLocationCode!.trim() ==
+                          e.tlLocationCode!.trim(),
+                    );
+                    !isMySite && !locator.get<SessionManager>().isSupervisor()
+                        ? CustomDialogBox.appDialog(
+                            context,
+                            NotifySupervisorDialog(),
+                          )
+                        : Navigator.of(
+                            context,
+                          ).pushNamed(AssetListPage.routeName);
+                  } else {
+                    Navigator.of(context).pushNamed(AssetListPage.routeName);
+                  }
+                },
+              ),
+              DataCell(Text(e.tlLocationName ?? '')),
+              DataCell(
+                ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: 450, minWidth: 200),
+                  child: Text(e.tlLocationAddress ?? '', maxLines: 1),
+                ),
+              ),
+            ],
+          ),
+        )
         .toList();
 
     return MediaQuery(
@@ -389,11 +400,9 @@ class Datatable extends StatelessWidget {
               controller: hScroll,
               scrollDirection: Axis.horizontal,
               child: DataTable(
-                headingRowColor: MaterialStateColor.resolveWith(
-                  (states) {
-                    return white;
-                  },
-                ),
+                headingRowColor: MaterialStateColor.resolveWith((states) {
+                  return white;
+                }),
                 columnSpacing: 30,
                 dividerThickness: 0,
                 horizontalMargin: 15,
@@ -410,21 +419,23 @@ class Datatable extends StatelessWidget {
                     ),
                   ),
                   DataColumn(
-                      label: Text(
-                    Constants.siteName,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      color: labelTextColor,
+                    label: Text(
+                      Constants.siteName,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: labelTextColor,
+                      ),
                     ),
-                  )),
+                  ),
                   DataColumn(
-                      label: Text(
-                    Constants.siteAddress,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      color: labelTextColor,
+                    label: Text(
+                      Constants.siteAddress,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: labelTextColor,
+                      ),
                     ),
-                  )),
+                  ),
                 ],
                 rows: rows,
               ),

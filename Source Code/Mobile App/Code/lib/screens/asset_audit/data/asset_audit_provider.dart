@@ -55,7 +55,7 @@ class AssetAuditProvider extends ChangeNotifier {
     dynaList = [];
     Future.wait([
       getAttributes(data.masterId!),
-      getAssetAuditDetails(data.taAssetId, isFromParent)
+      getAssetAuditDetails(data.taAssetId, isFromParent),
     ]).then((values) {
       if (isFromParent) {
         attributeList = values[0] as List<AssetAttribute>;
@@ -83,13 +83,14 @@ class AssetAuditProvider extends ChangeNotifier {
     await CommonMethods.isAuthKeyExpired();
     final header = {
       "Authorization": _session.getToken(),
-      'content-type': 'application/json'
+      'content-type': 'application/json',
     };
     CustomRequest request = CustomRequest(
-        url: Urls.assetTypeAttrUrl,
-        urlName: 'assetTypeAttr',
-        body: jsonEncode({"asset_type_id": assetTypeId}),
-        headers: header);
+      url: Urls.assetTypeAttrUrl,
+      urlName: 'assetTypeAttr',
+      body: jsonEncode({"asset_type_id": assetTypeId}),
+      headers: header,
+    );
     return _addAssetService
         .getAssetTypeAttributes(request)
         .then((value) => value.assetType ?? []);
@@ -104,36 +105,48 @@ class AssetAuditProvider extends ChangeNotifier {
           List<AssetTypeAttr?> typeAttrs = data!.typeAttr!;
           statList = [];
           dynaList = [];
-          statList.add(CustomAttributes(
+          statList.add(
+            CustomAttributes(
               key: 'Serial No.',
               value: data.taAssetManufactureSerialNo ?? '',
-              isMandate: true));
-          statList.add(CustomAttributes(
+              isMandate: true,
+            ),
+          );
+          statList.add(
+            CustomAttributes(
               key: Constants.assetTagNo,
               value: data.taAssetTagNumber ?? '',
-              isMandate: true));
-          statList.add(CustomAttributes(
-              key: 'Asset Name', value: data.taAssetName ?? ''));
-          statList.add(CustomAttributes(
+              isMandate: true,
+            ),
+          );
+          statList.add(
+            CustomAttributes(key: 'Asset Name', value: data.taAssetName ?? ''),
+          );
+          statList.add(
+            CustomAttributes(
               key: 'Parent Asset Name',
               value: data.taAssetParentId == null
                   ? '-'
                   : data.taAssetParentId == 0
-                      ? '-'
-                      : data.taAssetParentId.toString()));
+                  ? '-'
+                  : data.taAssetParentId.toString(),
+            ),
+          );
           for (var v in attributeList) {
             var e = typeAttrs.firstWhere(
-                (element) =>
-                    element!.atAssetTypeAttributeMasterId == v.attributeId,
-                orElse: () => AssetTypeAttr(typeAttrMaster: AttrMaster()));
+              (element) =>
+                  element!.atAssetTypeAttributeMasterId == v.attributeId,
+              orElse: () => AssetTypeAttr(typeAttrMaster: AttrMaster()),
+            );
             var master = e?.typeAttrMaster;
             if (v.display?.trim().toLowerCase() == 'yes') {
               var c = CustomAttributes(
-                  key: master?.ataAssetTypeAttributeName ?? v.attributeName,
-                  value: e?.atAssetAttributeValueText ?? '',
-                  datatype: v.attributeDatatype ?? '',
-                  isMandate: v.requieredNotRequiredFlag?.toLowerCase() == 'no',
-                  attributeId: v.attributeId.toString());
+                key: master?.ataAssetTypeAttributeName ?? v.attributeName,
+                value: e?.atAssetAttributeValueText ?? '',
+                datatype: v.attributeDatatype ?? '',
+                isMandate: v.requieredNotRequiredFlag?.toLowerCase() == 'no',
+                attributeId: v.attributeId.toString(),
+              );
               if (v.attributeCatagory == 0) {
                 statList.add(c);
               } else {
@@ -147,36 +160,48 @@ class AssetAuditProvider extends ChangeNotifier {
           List<AssetTypeAttr?> typeAttrs = data!.typeAttr!;
           statChildList = [];
           dynaChildList = [];
-          statChildList.add(CustomAttributes(
+          statChildList.add(
+            CustomAttributes(
               key: 'Serial No.',
               value: data.taAssetManufactureSerialNo ?? '',
-              isMandate: true));
-          statChildList.add(CustomAttributes(
+              isMandate: true,
+            ),
+          );
+          statChildList.add(
+            CustomAttributes(
               key: Constants.assetTagNo,
               value: data.taAssetTagNumber ?? '',
-              isMandate: true));
-          statChildList.add(CustomAttributes(
-              key: 'Asset Name', value: data.taAssetName ?? ''));
-          statChildList.add(CustomAttributes(
+              isMandate: true,
+            ),
+          );
+          statChildList.add(
+            CustomAttributes(key: 'Asset Name', value: data.taAssetName ?? ''),
+          );
+          statChildList.add(
+            CustomAttributes(
               key: 'Parent Asset Name',
               value: data.taAssetParentId == null
                   ? '-'
                   : data.taAssetParentId == 0
-                      ? '-'
-                      : data.taAssetParentId.toString()));
+                  ? '-'
+                  : data.taAssetParentId.toString(),
+            ),
+          );
           for (var v in childAttributeList) {
             var e = typeAttrs.firstWhere(
-                (element) =>
-                    element!.atAssetTypeAttributeMasterId == v.attributeId,
-                orElse: () => AssetTypeAttr(typeAttrMaster: AttrMaster()));
+              (element) =>
+                  element!.atAssetTypeAttributeMasterId == v.attributeId,
+              orElse: () => AssetTypeAttr(typeAttrMaster: AttrMaster()),
+            );
             var master = e?.typeAttrMaster;
             if (v.display?.trim().toLowerCase() == 'yes') {
               var c = CustomAttributes(
-                  key: master?.ataAssetTypeAttributeName ?? v.attributeName,
-                  value: e?.atAssetAttributeValueText ?? '',
-                  datatype: v.attributeDatatype ?? '',
-                  isMandate: v.requieredNotRequiredFlag?.toLowerCase() == 'no',
-                  attributeId: v.attributeId.toString());
+                key: master?.ataAssetTypeAttributeName ?? v.attributeName,
+                value: e?.atAssetAttributeValueText ?? '',
+                datatype: v.attributeDatatype ?? '',
+                isMandate: v.requieredNotRequiredFlag?.toLowerCase() == 'no',
+                attributeId: v.attributeId.toString(),
+              );
               if (v.attributeCatagory == 0) {
                 statChildList.add(c);
               } else {
@@ -197,30 +222,38 @@ class AssetAuditProvider extends ChangeNotifier {
     final children = allDataList
         .firstWhere((element) => element.taAssetId == assetId)
         .childs;
-    count =
-        children.where((element) => element.isAudited == 'Y').toList().length;
+    count = children
+        .where((element) => element.isAudited == 'Y')
+        .toList()
+        .length;
 
     if (count == children.length) {
       allDataList.firstWhere((a) => assetId == a.taAssetId).childEdited = 'Y';
       final audit = allDataList.firstWhere((a) => assetId == a.taAssetId);
-      audit.isAudited =
-          audit.isAudited == 'N' || audit.isAudited == 'O' ? 'O' : 'Y';
+      audit.isAudited = audit.isAudited == 'N' || audit.isAudited == 'O'
+          ? 'O'
+          : 'Y';
       allDataList.firstWhere((a) => assetId == a.taAssetId).isAudited =
           audit.isAudited;
       isChildSubmitted = true;
       Future.delayed(
-          const Duration(milliseconds: 200), () => Navigator.pop(context));
+        const Duration(milliseconds: 200),
+        () => Navigator.pop(context),
+      );
     }
     if (count > 0) {
       allDataList.firstWhere((a) => assetId == a.taAssetId).childEdited = 'Y';
       final audit = allDataList.firstWhere((a) => assetId == a.taAssetId);
-      audit.isAudited =
-          audit.isAudited == 'N' || audit.isAudited == 'O' ? 'O' : 'Y';
+      audit.isAudited = audit.isAudited == 'N' || audit.isAudited == 'O'
+          ? 'O'
+          : 'Y';
       allDataList.firstWhere((a) => assetId == a.taAssetId).isAudited =
           audit.isAudited;
     } else {
       ToastMessage.showMessage(
-          'Please audit all the assets.', kToastErrorColor);
+        'Please audit all the assets.',
+        kToastErrorColor,
+      );
     }
     notifyListeners();
   }
@@ -245,35 +278,44 @@ class AssetAuditProvider extends ChangeNotifier {
     }
   }
 
-  void updateChildAuditList(String type, int parentAssetId,
-      {required int assetId}) {
+  void updateChildAuditList(
+    String type,
+    int parentAssetId, {
+    required int assetId,
+  }) {
     _assetStatus(type, assetId);
     allDataList
-        .firstWhere((element) => element.taAssetId == parentAssetId)
-        .childs
-        .firstWhere((child) => child.taAssetId == assetId)
-        .isAudited = 'Y';
+            .firstWhere((element) => element.taAssetId == parentAssetId)
+            .childs
+            .firstWhere((child) => child.taAssetId == assetId)
+            .isAudited =
+        'Y';
     setDataOnTabs();
     notifyListeners();
   }
 
   void updateAuditList(int assetId, String type) {
     allDataList
-        .firstWhere((AssetDataModel element) => element.taAssetId == assetId)
-        .isAudited = 'Y';
+            .firstWhere(
+              (AssetDataModel element) => element.taAssetId == assetId,
+            )
+            .isAudited =
+        'Y';
     var a = allDataList.firstWhere((element) => element.taAssetId == assetId);
 
     _assetStatus(type, assetId);
     a.isAudited = a.isAudited == 'N'
         ? a.childs.isNotEmpty
-            ? a.childEdited == 'Y'
-                ? 'Y'
-                : 'O'
-            : 'Y'
+              ? a.childEdited == 'Y'
+                    ? 'Y'
+                    : 'O'
+              : 'Y'
         : 'Y';
 
-    allDataList[
-        allDataList.indexWhere((element) => element.taAssetId == assetId)] = a;
+    allDataList[allDataList.indexWhere(
+          (element) => element.taAssetId == assetId,
+        )] =
+        a;
     notifyListeners();
   }
 
@@ -292,32 +334,36 @@ class AssetAuditProvider extends ChangeNotifier {
     setLoading(true);
     final header = {
       "Authorization": _session.getToken(),
-      'content-type': 'application/json'
+      'content-type': 'application/json',
     };
     CustomRequest request = CustomRequest(
-        url: '${Urls.assetListUrl}$locationCode',
-        urlName: 'assetList',
-        headers: header);
-    _assetDetailsService
-        .fetchAssetList(request)
-        .then((List<AssetDataModel> response) {
+      url: '${Urls.assetListUrl}$locationCode',
+      urlName: 'assetList',
+      headers: header,
+    );
+    _assetDetailsService.fetchAssetList(request).then((
+      List<AssetDataModel> response,
+    ) {
       allDataList = response;
       setDataOnTabs();
     });
   }
 
   Future<SingleAssetModel> getAssetAuditDetails(
-      int id, bool isFromParent) async {
+    int id,
+    bool isFromParent,
+  ) async {
     await CommonMethods.isAuthKeyExpired();
     setAssetDetailsLoading(true);
     final header = {
       "Authorization": _session.getToken(),
-      'content-type': 'application/json'
+      'content-type': 'application/json',
     };
     CustomRequest request = CustomRequest(
-        url: '${Urls.singleAssetDetailsUrl}/$id',
-        urlName: 'singleAssetDetails',
-        headers: header);
+      url: '${Urls.singleAssetDetailsUrl}/$id',
+      urlName: 'singleAssetDetails',
+      headers: header,
+    );
     return _assetService
         .fetchSingleAssetDetails(request)
         .whenComplete(() => setAssetDetailsLoading(false));
@@ -338,13 +384,14 @@ class AssetAuditProvider extends ChangeNotifier {
     };
     final header = {
       "Authorization": _session.getToken(),
-      'content-type': 'application/json'
+      'content-type': 'application/json',
     };
     CustomRequest request = CustomRequest(
-        url: Urls.submitAssetAuditUrl,
-        urlName: 'submitAssetAudit',
-        body: jsonEncode(map),
-        headers: header);
+      url: Urls.submitAssetAuditUrl,
+      urlName: 'submitAssetAudit',
+      body: jsonEncode(map),
+      headers: header,
+    );
     return await _service.submitAssetAudit(request);
   }
 }

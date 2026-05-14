@@ -32,10 +32,7 @@ class DialogHeaderWidget extends StatelessWidget {
             Positioned(
               right: 0,
               child: IconButton(
-                icon: Icon(
-                  Icons.close,
-                  color: Colors.white,
-                ),
+                icon: Icon(Icons.close, color: Colors.white),
                 onPressed: () {
                   Navigator.of(context).pop(); // Close the dialog
                 },

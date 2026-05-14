@@ -12,8 +12,8 @@ import 'package:ats_system/utils/toast_message.dart';
 import 'package:ats_system/widgets/custom_dialog_box.dart';
 import 'package:ats_system/widgets/progress_bar.dart';
 import 'package:ats_system/widgets/status_icon.dart';
+import 'package:ai_barcode_scanner/ai_barcode_scanner.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:provider/provider.dart';
 
 class AuditPassiveTab extends StatefulWidget {
@@ -26,33 +26,48 @@ class AuditPassiveTab extends StatefulWidget {
 class _AuditPassiveTabState extends State<AuditPassiveTab> {
   final ScrollController scrollController = ScrollController();
 
-  void _scanQR(BuildContext context, AssetDataModel data) {
+  void _scanQR(BuildContext context, AssetDataModel data) async {
     context.read<MainProvider>().sessionTimeoutState(false);
 
-    FlutterBarcodeScanner.scanBarcode(
-            '#ff6666', Strings.btnCancel, true, ScanMode.QR)
-        .then((value) async {
-      context.read<MainProvider>().sessionTimeoutState(true);
-
-      if (value == data.parentTag) {
-        await Future.delayed(
-            const Duration(milliseconds: 200),
-            () => Navigator.pushNamed(context, AuditDetailsPage.routeName,
-                arguments: {'assetId': data, 'fromParent': true}));
-      } else {
-        ToastMessage.showMessage('Tag No does not match.', kToastErrorColor);
-      }
-    });
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => AiBarcodeScanner(
+          onDispose: () {
+            context.read<MainProvider>().sessionTimeoutState(true);
+          },
+          onDetect: (BarcodeCapture capture) {
+            final String? value = capture.barcodes.first.rawValue;
+            if (value != null && value == data.parentTag) {
+              Navigator.of(context).pop();
+              Future.delayed(
+                const Duration(milliseconds: 200),
+                () => Navigator.pushNamed(
+                  context,
+                  AuditDetailsPage.routeName,
+                  arguments: {'assetId': data, 'fromParent': true},
+                ),
+              );
+            } else if (value != null) {
+              ToastMessage.showMessage(
+                'Tag No does not match.',
+                kToastErrorColor,
+              );
+            }
+          },
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AssetAuditProvider>(builder: (context, provider, child) {
-      return provider.isLoading
-          ? const ProgressBar()
-          : SingleChildScrollView(
-              controller: scrollController,
-              child: ListView.separated(
+    return Consumer<AssetAuditProvider>(
+      builder: (context, provider, child) {
+        return provider.isLoading
+            ? const ProgressBar()
+            : SingleChildScrollView(
+                controller: scrollController,
+                child: ListView.separated(
                   physics: const NeverScrollableScrollPhysics(),
                   separatorBuilder: (context, index) => const Divider(),
                   shrinkWrap: true,
@@ -70,23 +85,28 @@ class _AuditPassiveTabState extends State<AuditPassiveTab> {
                               Padding(
                                 padding: const EdgeInsets.only(top: 1.0),
                                 child: StatusIcon(
-                                    size: const Size(15, 15),
-                                    color: data.isAudited == 'Y'
-                                        ? Colors.green
-                                        : data.isAudited == 'O'
-                                            ? Colors.orange
-                                            : Colors.red),
+                                  size: const Size(15, 15),
+                                  color: data.isAudited == 'Y'
+                                      ? Colors.green
+                                      : data.isAudited == 'O'
+                                      ? Colors.orange
+                                      : Colors.red,
+                                ),
                               ),
                               const SizedBox(width: 10.0),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(data.assetName ?? '',
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold)),
+                                  Text(
+                                    data.assetName ?? '',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                   const SizedBox(height: 5.0),
                                   Text(
-                                      'SL# ${data.taAssetManufactureSerialNo ?? ''}, TAG# ${data.parentTag ?? ''}'),
+                                    'SL# ${data.taAssetManufactureSerialNo ?? ''}, TAG# ${data.parentTag ?? ''}',
+                                  ),
                                 ],
                               ),
                               const SizedBox(width: 10.0),
@@ -106,139 +126,159 @@ class _AuditPassiveTabState extends State<AuditPassiveTab> {
                                         ? null
                                         : () => _scanQR(context, data),
                                     style: ElevatedButton.styleFrom(
-                                        minimumSize: Size.zero,
-                                        padding: const EdgeInsets.all(5.0)),
+                                      minimumSize: Size.zero,
+                                      padding: const EdgeInsets.all(5.0),
+                                    ),
                                     child: const Text('Scan'),
                                   ),
                                   const SizedBox(width: 10),
                                   ElevatedButton(
                                     onPressed: () async {
                                       CustomDialogBox.appDialog(
-                                          context,
-                                          CustomDialog(
-                                            title: Strings.dialogTitleMessage,
-                                            body: RaiseTicketDialog(),
-                                            footer: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                ElevatedButton(
-                                                    onPressed: () {
-                                                      context
-                                                          .read<HomeProvider>()
-                                                          .sendMail(
-                                                              'assetMissing',
-                                                              assetId: data
-                                                                  .taAssetId,
-                                                              location: context
-                                                                  .read<
-                                                                      HomeProvider>()
-                                                                  .selectedSite
-                                                                  ?.tlLocationId)
-                                                          .then((value) {
+                                        context,
+                                        CustomDialog(
+                                          title: Strings.dialogTitleMessage,
+                                          body: RaiseTicketDialog(),
+                                          footer: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  context
+                                                      .read<HomeProvider>()
+                                                      .sendMail(
+                                                        'assetMissing',
+                                                        assetId: data.taAssetId,
+                                                        location: context
+                                                            .read<
+                                                              HomeProvider
+                                                            >()
+                                                            .selectedSite
+                                                            ?.tlLocationId,
+                                                      )
+                                                      .then((value) {
                                                         if (value.statusCode ==
                                                             SUCCESS_RESPONSE_CODE) {
-                                                          provider.updateAuditList(
-                                                              data.taAssetId,
-                                                              'assetMissing');
-                                                          Navigator.of(context)
-                                                              .pop();
+                                                          provider
+                                                              .updateAuditList(
+                                                                data.taAssetId,
+                                                                'assetMissing',
+                                                              );
+                                                          Navigator.of(
+                                                            context,
+                                                          ).pop();
                                                         }
                                                       });
-                                                    },
-                                                    child: const Text(
-                                                        Strings.btnOk)),
-                                                const SizedBox(width: 10),
-                                                ElevatedButton(
-                                                    onPressed: () {
-                                                      Navigator.pop(context);
-                                                    },
-                                                    child: const Text(
-                                                        Strings.btnCancel)),
-                                              ],
-                                            ),
-                                          ));
+                                                },
+                                                child: const Text(
+                                                  Strings.btnOk,
+                                                ),
+                                              ),
+                                              const SizedBox(width: 10),
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                child: const Text(
+                                                  Strings.btnCancel,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
                                     },
                                     style: ElevatedButton.styleFrom(
-                                        minimumSize: Size.zero,
-                                        padding: const EdgeInsets.all(5.0)),
+                                      minimumSize: Size.zero,
+                                      padding: const EdgeInsets.all(5.0),
+                                    ),
                                     child: const Text('Asset Missing'),
                                   ),
                                   const SizedBox(width: 10),
                                   ElevatedButton(
                                     onPressed: () {
                                       CustomDialogBox.appDialog(
-                                          context,
-                                          CustomDialog(
-                                            title:
-                                                'Raise ticket to Re-Tag Asset',
-                                            body: ReTagAssetDialog(),
-                                            footer: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  ElevatedButton(
-                                                      onPressed: () {
-                                                        context
+                                        context,
+                                        CustomDialog(
+                                          title: 'Raise ticket to Re-Tag Asset',
+                                          body: ReTagAssetDialog(),
+                                          footer: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  context
+                                                      .read<HomeProvider>()
+                                                      .sendMail(
+                                                        'tagMissing',
+                                                        assetId: data.taAssetId,
+                                                        location: context
                                                             .read<
-                                                                HomeProvider>()
-                                                            .sendMail(
-                                                                'tagMissing',
-                                                                assetId: data
-                                                                    .taAssetId,
-                                                                location: context
-                                                                    .read<
-                                                                        HomeProvider>()
-                                                                    .selectedSite
-                                                                    ?.tlLocationId)
-                                                            .then((value) {
-                                                          if (value
-                                                                  .statusCode ==
-                                                              SUCCESS_RESPONSE_CODE) {
-                                                            provider.updateAuditList(
+                                                              HomeProvider
+                                                            >()
+                                                            .selectedSite
+                                                            ?.tlLocationId,
+                                                      )
+                                                      .then((value) {
+                                                        if (value.statusCode ==
+                                                            SUCCESS_RESPONSE_CODE) {
+                                                          provider
+                                                              .updateAuditList(
                                                                 data.taAssetId,
-                                                                'tagMissing');
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                          }
-                                                        });
-                                                      },
-                                                      child: const Text(
-                                                          Strings.btnOk)),
-                                                  const SizedBox(width: 10),
-                                                  ElevatedButton(
-                                                      onPressed: () {
-                                                        Navigator.pop(context);
-                                                      },
-                                                      child: const Text(
-                                                          Strings.btnCancel)),
-                                                ]),
-                                          ));
+                                                                'tagMissing',
+                                                              );
+                                                          Navigator.of(
+                                                            context,
+                                                          ).pop();
+                                                        }
+                                                      });
+                                                },
+                                                child: const Text(
+                                                  Strings.btnOk,
+                                                ),
+                                              ),
+                                              const SizedBox(width: 10),
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                child: const Text(
+                                                  Strings.btnCancel,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
                                     },
                                     style: ElevatedButton.styleFrom(
-                                        minimumSize: Size.zero,
-                                        padding: const EdgeInsets.all(5.0)),
+                                      minimumSize: Size.zero,
+                                      padding: const EdgeInsets.all(5.0),
+                                    ),
                                     child: const Text('Tag Missing'),
                                   ),
                                   const SizedBox(width: 10),
                                   ElevatedButton(
                                     onPressed: data.childs.isNotEmpty
                                         ? () {
-                                            Navigator.pushNamed(context,
-                                                ChildAssetAuditPage.routeName,
-                                                arguments: {
-                                                  'auditData': data,
-                                                  'siteData': context
-                                                      .read<HomeProvider>()
-                                                      .selectedSite
-                                                }).then(
-                                                (value) => setState(() {}));
+                                            Navigator.pushNamed(
+                                              context,
+                                              ChildAssetAuditPage.routeName,
+                                              arguments: {
+                                                'auditData': data,
+                                                'siteData': context
+                                                    .read<HomeProvider>()
+                                                    .selectedSite,
+                                              },
+                                            ).then((value) => setState(() {}));
                                           }
                                         : null,
                                     style: ElevatedButton.styleFrom(
-                                        minimumSize: Size.zero,
-                                        padding: const EdgeInsets.all(5.0)),
+                                      minimumSize: Size.zero,
+                                      padding: const EdgeInsets.all(5.0),
+                                    ),
                                     child: const Text('Child'),
                                   ),
                                 ],
@@ -248,8 +288,10 @@ class _AuditPassiveTabState extends State<AuditPassiveTab> {
                         ],
                       ),
                     );
-                  }),
-            );
-    });
+                  },
+                ),
+              );
+      },
+    );
   }
 }

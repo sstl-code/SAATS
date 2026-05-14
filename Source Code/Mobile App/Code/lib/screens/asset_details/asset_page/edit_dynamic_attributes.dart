@@ -1,4 +1,4 @@
-import 'package:ats_system/core/utlis/permission_manager.dart';
+import 'package:ats_system/core/utils/permission_manager.dart';
 import 'package:ats_system/screens/asset_details/data/asset_details_provider.dart';
 import 'package:ats_system/screens/asset_details/widgets/attributes_widget.dart';
 import 'package:ats_system/utils/constants.dart';
@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 
 class EditDynamicAttributesWidget extends StatefulWidget {
   const EditDynamicAttributesWidget({Key? key, required this.assetId})
-      : super(key: key);
+    : super(key: key);
   final int assetId;
 
   @override
@@ -21,7 +21,8 @@ class EditDynamicAttributesWidget extends StatefulWidget {
 }
 
 class _EditDynamicAttributesWidgetState
-    extends State<EditDynamicAttributesWidget> with WidgetsBindingObserver {
+    extends State<EditDynamicAttributesWidget>
+    with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
@@ -47,72 +48,81 @@ class _EditDynamicAttributesWidgetState
           physics: BouncingScrollPhysics(),
           children: [
             AttributesWidget(
-                data: provider.attributeList
-                    .where((element) =>
+              data: provider.attributeList
+                  .where(
+                    (element) =>
                         element.attributeCatagory != 0 &&
-                        element.display?.toUpperCase() == "YES")
-                    .toList()),
+                        element.display?.toUpperCase() == "YES",
+                  )
+                  .toList(),
+            ),
             const SizedBox(height: 10),
             (provider.isAssetUpdating)
-                ? Column(
-                    children: [
-                      ProgressBar(),
-                      const SizedBox(height: 10),
-                    ],
-                  )
+                ? Column(children: [ProgressBar(), const SizedBox(height: 10)])
                 : Container(),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                    onPressed: () async {
-                      FocusScope.of(context).unfocus();
-                      final assetAttributes = provider.attributeList
-                          .where((e) =>
+                  onPressed: () async {
+                    FocusScope.of(context).unfocus();
+                    final assetAttributes = provider.attributeList
+                        .where(
+                          (e) =>
                               e.attributeCatagory != 0 &&
-                              e.display?.toUpperCase() == 'YES')
-                          .toList();
+                              e.display?.toUpperCase() == 'YES',
+                        )
+                        .toList();
 
-                      var isValidated = await provider
-                          .validateDynamicAttributes(assetAttributes);
+                    var isValidated = await provider.validateDynamicAttributes(
+                      assetAttributes,
+                    );
 
-                      if (isValidated) {
-                        var model = await provider
-                            .getUpdateDynamicAttributesModel(assetAttributes);
+                    if (isValidated) {
+                      var model = await provider
+                          .getUpdateDynamicAttributesModel(assetAttributes);
 
-                        checkPermission(
-                          permission: Permission.location,
-                          onPermissionDeniedPermenanty: () {
-                            showPermissionRequiredDialog(
-                                context, locationPermissionMessage);
-                          },
-                          onPermissionGranted: () {
-                            provider.editAsset(model).then((value) {
-                              ToastMessage.showMessage(
+                      checkPermission(
+                        permission: Permission.location,
+                        onPermissionDeniedPermenanty: () {
+                          showPermissionRequiredDialog(
+                            context,
+                            locationPermissionMessage,
+                          );
+                        },
+                        onPermissionGranted: () {
+                          provider
+                              .editAsset(model)
+                              .then((value) {
+                                ToastMessage.showMessage(
                                   value.message,
                                   value.status == SUCCESS_RESPONSE_CODE
                                       ? kToastSuccessColor
-                                      : kToastErrorColor);
-                              if (value.status == SUCCESS_RESPONSE_CODE) {
-                                Navigator.pop(context);
-                              }
-                            }).whenComplete(() {
-                              setState(() {
-                                provider.setAssetUpdating(false);
+                                      : kToastErrorColor,
+                                );
+                                if (value.status == SUCCESS_RESPONSE_CODE) {
+                                  Navigator.pop(context);
+                                }
+                              })
+                              .whenComplete(() {
+                                setState(() {
+                                  provider.setAssetUpdating(false);
+                                });
                               });
-                            });
-                          },
-                          onPermissionDenied: () {
-                            context.showSnackBar(pleaseAllowLocationPermission);
-                          },
-                        );
-                      }
-                    },
-                    child: const Text(Strings.btnSubmit)),
+                        },
+                        onPermissionDenied: () {
+                          context.showSnackBar(pleaseAllowLocationPermission);
+                        },
+                      );
+                    }
+                  },
+                  child: const Text(Strings.btnSubmit),
+                ),
                 const SizedBox(width: 10),
                 ElevatedButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: const Text(Strings.btnCancel)),
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text(Strings.btnCancel),
+                ),
                 const SizedBox(height: 10),
               ],
             ),

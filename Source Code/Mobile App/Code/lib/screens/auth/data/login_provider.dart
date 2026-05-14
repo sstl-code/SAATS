@@ -109,8 +109,8 @@ class LoginProvider extends ChangeNotifier {
       return false;
     }
     if (!RegExp(
-            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-        .hasMatch(input)) {
+      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
+    ).hasMatch(input)) {
       setUserError(Strings.incorrectEmail);
       return false;
     }
@@ -124,32 +124,33 @@ class LoginProvider extends ChangeNotifier {
       type == 'pw'
           ? setPwError(Strings.emptyPassword)
           : type == 'np'
-              ? setNewPwError('New Password can\'t be empty.')
-              : setCNPwError('Confirm password can\'t be empty.');
+          ? setNewPwError('New Password can\'t be empty.')
+          : setCNPwError('Confirm password can\'t be empty.');
       return false;
     } else if (input.entries.first.value.trim().length < 5) {
       type == 'pw'
           ? setPwError('Password should be greater than 4 digits.')
           : type == 'np'
-              ? setNewPwError('New password should be greater than 4 digits.')
-              : setCNPwError(
-                  'Confirm new password should be greater than 4 digits.');
+          ? setNewPwError('New password should be greater than 4 digits.')
+          : setCNPwError(
+              'Confirm new password should be greater than 4 digits.',
+            );
       return false;
     }
     type == 'pw'
         ? setPwError(null)
         : type == 'np'
-            ? setNewPwError(null)
-            : setCNPwError(null);
+        ? setNewPwError(null)
+        : setCNPwError(null);
     return true;
   }
 
   void setLoginDetails(LoginModel model, String username, String password) {
     User? result = model.data.user;
     if (result == null) return;
-    _session.setExpirationTime(DateTime.now()
-        .add(Duration(seconds: model.data.expiresIn!))
-        .toString());
+    _session.setExpirationTime(
+      DateTime.now().add(Duration(seconds: model.data.expiresIn!)).toString(),
+    );
     _session.setToken('${model.data.tokenType!} ${model.data.accessToken!}');
     _session.setRefreshToken(model.data.refreshToken!);
     _session.setLoginId(username);
@@ -164,49 +165,56 @@ class LoginProvider extends ChangeNotifier {
   Future<String?> doLogin(String username, String password) async {
     setProcessing(true);
 
-    LoginReqModel body = LoginReqModel(
-      email: username,
-      password: password,
-    );
+    LoginReqModel body = LoginReqModel(email: username, password: password);
     return _loginService
-        .doLogin(CustomRequest(
-            url: Urls.loginUrl, urlName: 'loginUrl', body: jsonEncode(body)))
+        .doLogin(
+          CustomRequest(
+            url: Urls.loginUrl,
+            urlName: 'loginUrl',
+            body: jsonEncode(body),
+          ),
+        )
         .then((response) async {
-      try {
-        if (response != null) {
-          if (response.status == 'Success') {
-            _loginModel = response;
+          try {
+            if (response != null) {
+              if (response.status == 'Success') {
+                _loginModel = response;
 
-            setLoginDetails(_loginModel!, username, password);
-            return response.status!;
-          } else {
-            return response.data.message;
+                setLoginDetails(_loginModel!, username, password);
+                return response.status!;
+              } else {
+                return response.data.message;
+              }
+            }
+            return null;
+          } catch (e) {
+            return null;
           }
-        }
-        return null;
-      } catch (e) {
-        return null;
-      }
-    }).whenComplete(() => setProcessing(false));
+        })
+        .whenComplete(() => setProcessing(false));
   }
 
   Future<ChangePwResponse> changePassword(String oldPwd, String newPwd) async {
     await CommonMethods.isAuthKeyExpired();
     setProcessing(true);
     ChangePasswordModel model = ChangePasswordModel(
-        oldPassword: oldPwd,
-        newPassword: newPwd,
-        userId: _session.getUserId()!);
+      oldPassword: oldPwd,
+      newPassword: newPwd,
+      userId: _session.getUserId()!,
+    );
     final header = {
       "Authorization": _session.getToken(),
-      'content-type': 'application/json'
+      'content-type': 'application/json',
     };
     return await _loginService
-        .changePassword(CustomRequest(
+        .changePassword(
+          CustomRequest(
             url: Urls.changePasswordUrl,
             urlName: 'changePassword',
             body: jsonEncode(model.toJson()),
-            headers: header))
+            headers: header,
+          ),
+        )
         .then((value) => value)
         .whenComplete(() => setProcessing(false));
   }

@@ -22,9 +22,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CustomNavigationDrawer extends StatefulWidget {
-  const CustomNavigationDrawer(
-      {Key? key, this.isFromAsset = false, this.siteData})
-      : super(key: key);
+  const CustomNavigationDrawer({
+    Key? key,
+    this.isFromAsset = false,
+    this.siteData,
+  }) : super(key: key);
   final bool isFromAsset;
   final SiteData? siteData;
 
@@ -35,32 +37,38 @@ class CustomNavigationDrawer extends StatefulWidget {
 class _CustomNavigationDrawerState extends State<CustomNavigationDrawer>
     with WidgetsBindingObserver {
   final SessionManager _session = locator<SessionManager>();
-  final AppMetaDataManager dataSource =
-      locator.get<AppMetaDataManager>(instanceName: 'local-app-metadata');
+  final AppMetaDataManager dataSource = locator.get<AppMetaDataManager>(
+    instanceName: 'local-app-metadata',
+  );
 
   void _gotoLogin(BuildContext context) {
-    Navigator.of(context)
-        .pushNamedAndRemoveUntil(LoginPage.routeName, (route) => false);
+    Navigator.of(
+      context,
+    ).pushNamedAndRemoveUntil(LoginPage.routeName, (route) => false);
   }
 
   void _showLogoutDialog(BuildContext context) {
     CustomDialogBox.appDialog(
-        context,
-        AlertDialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-          title: const Text('Are you sure?'),
-          content: const Text('Do you want to logout?'),
-          actions: <Widget>[
-            TextButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: const Text(Strings.btnNo)),
-            TextButton(
-                onPressed: () => _logout(context),
-                child: const Text(Strings.btnYes)),
-          ],
+      context,
+      AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
         ),
-        barrierDismissible: true);
+        title: const Text('Are you sure?'),
+        content: const Text('Do you want to logout?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text(Strings.btnNo),
+          ),
+          TextButton(
+            onPressed: () => _logout(context),
+            child: const Text(Strings.btnYes),
+          ),
+        ],
+      ),
+      barrierDismissible: true,
+    );
   }
 
   void _logout(BuildContext context) async {
@@ -84,107 +92,147 @@ class _CustomNavigationDrawerState extends State<CustomNavigationDrawer>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const SizedBox(
-                        height: 10,
-                      ),
+                      const SizedBox(height: 10),
                       GestureDetector(
-                          onTap: () {
-                            context.read<HomeProvider>().selectedSite = null;
-                            context.read<HomeProvider>().setTaskCount(0);
-                            Navigator.of(context).pushNamed(HomePage.routeName);
-                          },
-                          child: const _CustomItem(
-                              title: Strings.appBarHome,
-                              image: 'assets/images/icon_home.png')),
+                        onTap: () {
+                          context.read<HomeProvider>().selectedSite = null;
+                          context.read<HomeProvider>().setTaskCount(0);
+                          Navigator.of(context).pushNamed(HomePage.routeName);
+                        },
+                        child: const _CustomItem(
+                          title: Strings.appBarHome,
+                          image: 'assets/images/icon_home.png',
+                        ),
+                      ),
                       const Divider(),
                       GestureDetector(
-                          onTap: widget.isFromAsset
-                              ? () {
-                                  Navigator.of(context).pop();
-                                  Navigator.of(context).pushNamed(
-                                      TaskListPage.routeName,
-                                      arguments: widget.siteData!);
-                                }
-                              : () => ToastMessage.showMessage(
-                                  'Please go to any site.', kToastErrorColor),
-                          child: Selector<HomeProvider, int>(
-                              selector: (context, prov) => prov.taskCount,
-                              builder: (context, count, child) => _CustomItem(
-                                  title: 'Task List',
-                                  image: 'assets/images/icon_bell.png',
-                                  taskCount: count != 0 ? count : null))),
+                        onTap: () {
+                          final selectedSite =
+                              widget.siteData ??
+                              context.read<HomeProvider>().selectedSite;
+
+                          if (selectedSite == null) {
+                            Navigator.of(context).pop();
+                            ToastMessage.showMessage(
+                              'Please go to any site.',
+                              kToastErrorColor,
+                            );
+                          } else {
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pushNamed(
+                              TaskListPage.routeName,
+                              arguments: selectedSite,
+                            );
+                          }
+                        },
+                        child: Selector<HomeProvider, int>(
+                          selector: (context, prov) => prov.taskCount,
+                          builder: (context, count, child) => _CustomItem(
+                            title: 'Task List',
+                            image: 'assets/images/icon_bell.png',
+                            taskCount: count != 0 ? count : null,
+                          ),
+                        ),
+                      ),
                       const Divider(),
                       Visibility(
                         visible: _session.isSupervisor(),
                         child: Column(
                           children: [
                             GestureDetector(
-                                onTap: () {
-                                  if (widget.siteData == null) {
-                                    ToastMessage.showMessage(
-                                        'Please go to any site.',
-                                        kToastErrorColor);
-                                  } else {
-                                    Navigator.of(context).pop();
-                                    Navigator.of(context).pushNamed(
-                                        AssetAuditPage.routeName,
-                                        arguments: widget.siteData);
-                                  }
-                                },
-                                child: const _CustomItem(
-                                    title: 'Site Audit',
-                                    image: 'assets/images/icon_audit.png')),
+                              onTap: () {
+                                final selectedSite =
+                                    widget.siteData ??
+                                    context.read<HomeProvider>().selectedSite;
+
+                                if (selectedSite == null) {
+                                  Navigator.of(context).pop();
+                                  ToastMessage.showMessage(
+                                    'Please go to any site.',
+                                    kToastErrorColor,
+                                  );
+                                } else {
+                                  Navigator.of(context).pop();
+                                  Navigator.of(context).pushNamed(
+                                    AssetAuditPage.routeName,
+                                    arguments: selectedSite,
+                                  );
+                                }
+                              },
+                              child: const _CustomItem(
+                                title: 'Site Audit',
+                                image: 'assets/images/icon_audit.png',
+                              ),
+                            ),
                             const Divider(),
                           ],
                         ),
                       ),
                       GestureDetector(
-                          onTap: () {
-                            if (widget.siteData == null) {
-                              ToastMessage.showMessage(
-                                  'Please go to any site.', kToastErrorColor);
-                            } else {
-                              Navigator.of(context).pop();
-                              Navigator.of(context).pushNamed(
-                                  SiteGalleryScreen.routeName,
-                                  arguments: widget.siteData?.tlLocationId);
-                            }
-                          },
-                          child: const _CustomItem(
-                              title: 'Site Gallery',
-                              image: 'assets/images/icon_site_gallery.png')),
+                        onTap: () {
+                          final selectedSite =
+                              widget.siteData ??
+                              context.read<HomeProvider>().selectedSite;
+
+                          if (selectedSite == null) {
+                            Navigator.of(context).pop();
+                            ToastMessage.showMessage(
+                              'Please go to any site.',
+                              kToastErrorColor,
+                            );
+                          } else {
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pushNamed(
+                              SiteGalleryScreen.routeName,
+                              arguments: selectedSite.tlLocationId,
+                            );
+                          }
+                        },
+                        child: const _CustomItem(
+                          title: 'Site Gallery',
+                          image: 'assets/images/icon_site_gallery.png',
+                        ),
+                      ),
                       const Divider(),
                       GestureDetector(
-                          onTap: () => CustomDialogBox.appDialog(
-                              context,
-                              const CustomDialog(
-                                title: 'Change Password',
-                                body: ChangePasswordDialog(),
-                                footer: SizedBox(),
-                              )),
-                          child: const _CustomItem(
-                              title: 'Change Password',
-                              image: 'assets/images/icon_lock.png')),
+                        onTap: () => CustomDialogBox.appDialog(
+                          context,
+                          const CustomDialog(
+                            title: 'Change Password',
+                            body: ChangePasswordDialog(),
+                            footer: SizedBox(),
+                          ),
+                        ),
+                        child: const _CustomItem(
+                          title: 'Change Password',
+                          image: 'assets/images/icon_lock.png',
+                        ),
+                      ),
                       const Divider(),
                       if (!kReleaseMode)
                         GestureDetector(
-                            onTap: () => CustomDialogBox.appDialog(
-                                context,
-                                const CustomDialog(
-                                  title: 'Proxy Settings',
-                                  body: ProxySettingsWidget(),
-                                  footer: SizedBox(),
-                                )),
-                            child: const _CustomItem(
-                                title: 'Proxy Settings',
-                                image: 'assets/images/icon_proxy.png')),
+                          onTap: () => CustomDialogBox.appDialog(
+                            context,
+                            const CustomDialog(
+                              title: 'Proxy Settings',
+                              body: ProxySettingsWidget(),
+                              footer: SizedBox(),
+                            ),
+                          ),
+                          child: const _CustomItem(
+                            title: 'Proxy Settings',
+                            image: 'assets/images/icon_proxy.png',
+                          ),
+                        ),
 
                       const Divider(),
                       GestureDetector(
-                          onTap: () => _showLogoutDialog(context),
-                          child: const _CustomItem(
-                              title: 'Logout',
-                              image: 'assets/images/icon_logout.png')),
+                        onTap: () => _showLogoutDialog(context),
+                        child: const _CustomItem(
+                          title: 'Logout',
+                          image: 'assets/images/icon_logout.png',
+                        ),
+                      ),
 
                       // )
                     ],
@@ -195,61 +243,60 @@ class _CustomNavigationDrawerState extends State<CustomNavigationDrawer>
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Released date:',
-                          style: TextStyle(color: kPrimaryColor, fontSize: 13),
-                        ),
-                        const SizedBox(
-                          height: 3,
-                        ),
-                        FutureBuilder<AppMetadatum?>(
-                            future: getValueByKey('Released_Date'),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                AppMetadatum? metaData = snapshot.data!;
-                                return Text(
-                                  metaData.settingValue ?? 'N/A',
-                                  style: TextStyle(color: grey, fontSize: 12),
-                                );
-                              } else {
-                                return SizedBox();
-                              }
-                            })
-                      ],
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          'App version:',
-                          style: TextStyle(color: kPrimaryColor, fontSize: 13),
-                        ),
-                        const SizedBox(
-                          height: 3,
-                        ),
-                        FutureBuilder<AppMetadatum?>(
-                            future: getValueByKey('App_Version'),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                AppMetadatum? metaData = snapshot.data!;
-                                return Text(
-                                  metaData.settingValue ?? 'N/A',
-                                  style: TextStyle(color: grey, fontSize: 12),
-                                );
-                              } else {
-                                return SizedBox();
-                              }
-                            })
-                      ],
-                    ),
-                  ]),
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Released date:',
+                        style: TextStyle(color: kPrimaryColor, fontSize: 13),
+                      ),
+                      const SizedBox(height: 3),
+                      FutureBuilder<AppMetadatum?>(
+                        future: getValueByKey('Released_Date'),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            AppMetadatum? metaData = snapshot.data!;
+                            return Text(
+                              metaData.settingValue ?? 'N/A',
+                              style: TextStyle(color: grey, fontSize: 12),
+                            );
+                          } else {
+                            return SizedBox();
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        'App version:',
+                        style: TextStyle(color: kPrimaryColor, fontSize: 13),
+                      ),
+                      const SizedBox(height: 3),
+                      FutureBuilder<AppMetadatum?>(
+                        future: getValueByKey('App_Version'),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            AppMetadatum? metaData = snapshot.data!;
+                            return Text(
+                              metaData.settingValue ?? 'N/A',
+                              style: TextStyle(color: grey, fontSize: 12),
+                            );
+                          } else {
+                            return SizedBox();
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -263,9 +310,12 @@ class _CustomNavigationDrawerState extends State<CustomNavigationDrawer>
 }
 
 class _CustomItem extends StatelessWidget {
-  const _CustomItem(
-      {Key? key, required this.image, required this.title, this.taskCount})
-      : super(key: key);
+  const _CustomItem({
+    Key? key,
+    required this.image,
+    required this.title,
+    this.taskCount,
+  }) : super(key: key);
   final String title, image;
   final int? taskCount;
 
@@ -283,7 +333,11 @@ class _CustomItem extends StatelessWidget {
                 image,
                 height: 20,
                 width: 20,
-                color: kPrimaryColor,
+                errorBuilder: (context, error, stackTrace) => const Icon(
+                  Icons.image_not_supported,
+                  size: 20,
+                  color: Colors.red,
+                ),
               ), // Icon(Icons.home),
               const SizedBox(width: 10),
               Text(title),
@@ -292,14 +346,17 @@ class _CustomItem extends StatelessWidget {
           Visibility(
             visible: taskCount != null,
             child: Positioned(
-                left: -10,
-                top: -10,
-                child: Container(
-                    padding: const EdgeInsets.all(7),
-                    decoration: const BoxDecoration(
-                        shape: BoxShape.circle, color: Colors.orange),
-                    child: Text('$taskCount',
-                        style: const TextStyle(fontSize: 10)))),
+              left: -10,
+              top: -10,
+              child: Container(
+                padding: const EdgeInsets.all(7),
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.orange,
+                ),
+                child: Text('$taskCount', style: const TextStyle(fontSize: 10)),
+              ),
+            ),
           ),
         ],
       ),

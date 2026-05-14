@@ -37,58 +37,68 @@ class Routes {
       case AssetPage.routeName:
         final map = routeSettings.arguments as Map;
         return FadeTransitionRoute(
-            pageName: AssetPage(
-                assetId: map['assetId'],
-                masterId: map['assetTypeMasterId'],
-                assetName: map['assetName'],
-                assetTypeName: map['assetTypeName']));
+          pageName: AssetPage(
+            assetId: map['assetId'],
+            masterId: map['assetTypeMasterId'],
+            assetName: map['assetName'],
+            assetTypeName: map['assetTypeName'],
+          ),
+        );
       case ChildAssetAuditPage.routeName:
         final map = routeSettings.arguments as Map<String, dynamic>;
         return FadeTransitionRoute(
-            pageName: ChildAssetAuditPage(
-                auditData: map['auditData'], siteData: map['siteData']));
+          pageName: ChildAssetAuditPage(
+            auditData: map['auditData'],
+            siteData: map['siteData'],
+          ),
+        );
       case AuditDetailsPage.routeName:
         final map = routeSettings.arguments as Map<String, dynamic>;
         return FadeTransitionRoute(
           pageName: AuditDetailsPage(
-              assetDataModel: map['assetId'],
-              isFromParent: map['fromParent'] ?? true,
-              parentAssetId: map['parentAssetId']),
+            assetDataModel: map['assetId'],
+            isFromParent: map['fromParent'] ?? true,
+            parentAssetId: map['parentAssetId'],
+          ),
         );
       case AuditChildDetailsPage.routeName:
         final map = routeSettings.arguments as Map<String, dynamic>;
         return FadeTransitionRoute(
           pageName: AuditChildDetailsPage(
-              assetDataModel: map['assetId'],
-              isFromParent: map['fromParent'] ?? true,
-              parentAssetId: map['parentAssetId']),
+            assetDataModel: map['assetId'],
+            isFromParent: map['fromParent'] ?? true,
+            parentAssetId: map['parentAssetId'],
+          ),
         );
 
       case AddAssetScreen.routeName:
         final map = routeSettings.arguments as Map;
 
         return FadeTransitionRoute(
-            pageName: AddAssetScreen(
-          addAssetScreenFrom: map['addAssetScreenFrom'],
-          assetTypeId: map['assetTypeId'],
-          assetId: map['assetId'],
-          category: map['category'],
-          parentAssetName: map['parentAssetName'],
-          parentAssetTypeDesc: map['parentAssetTypeDesc'],
-          parentSerialNumber: map['parentSerialNumber'],
-          editAssetModel: map['editAssetModel'],
-        ));
+          pageName: AddAssetScreen(
+            addAssetScreenFrom: map['addAssetScreenFrom'],
+            assetTypeId: map['assetTypeId'],
+            assetId: map['assetId'],
+            category: map['category'],
+            parentAssetName: map['parentAssetName'],
+            parentAssetTypeDesc: map['parentAssetTypeDesc'],
+            parentSerialNumber: map['parentSerialNumber'],
+            editAssetModel: map['editAssetModel'],
+          ),
+        );
       case TaskListPage.routeName:
         final siteData = routeSettings.arguments as SiteData;
         return FadeTransitionRoute(pageName: TaskListPage(siteData: siteData));
       case STNPage.routeName:
         final map = routeSettings.arguments as Map<String, dynamic>;
         return FadeTransitionRoute(
-            pageName: STNPage(task: map['task'], siteData: map['siteData']));
+          pageName: STNPage(task: map['task'], siteData: map['siteData']),
+        );
       case SRNPage.routeName:
         final map = routeSettings.arguments as Map<String, dynamic>;
         return FadeTransitionRoute(
-            pageName: SRNPage(task: map['task'], siteData: map['siteData']));
+          pageName: SRNPage(task: map['task'], siteData: map['siteData']),
+        );
       case AssetAuditPage.routeName:
         final site = routeSettings.arguments as SiteData;
         return FadeTransitionRoute(pageName: AssetAuditPage(siteData: site));
@@ -100,30 +110,33 @@ class Routes {
       case CameraScreen.routeName:
         final map = routeSettings.arguments as Map<String, dynamic>;
         return FadeTransitionRoute(
-            pageName: CameraScreen(
-          galleryType: map['galleryType'] as GalleryType,
-          siteId: map['siteId'],
-        ));
+          pageName: CameraScreen(
+            galleryType: map['galleryType'] as GalleryType,
+            siteId: map['siteId'],
+          ),
+        );
       case VideoPlayerScreen.routeName:
         final videoUrl = routeSettings.arguments as String;
         return FadeTransitionRoute(
-            pageName: VideoPlayerScreen(
-          videoUrl: videoUrl,
-        ));
+          pageName: VideoPlayerScreen(videoUrl: videoUrl),
+        );
       case ImageViewer.routeName:
         final map = routeSettings.arguments as Map<String, dynamic>;
         return FadeTransitionRoute(
-            pageName: ImageViewer(
-          imageUrls: map['mediaList'],
-          initialIndex: map['initialIndex'],
-        ));
+          pageName: ImageViewer(
+            imageUrls: map['mediaList'],
+            initialIndex: map['initialIndex'],
+          ),
+        );
       default:
         return FadeTransitionRoute(
-            pageName: SafeArea(
-          child: Scaffold(
+          pageName: SafeArea(
+            child: Scaffold(
               appBar: AppBar(),
-              body: const Center(child: Text('404. \nScreen does not exist!'))),
-        ));
+              body: const Center(child: Text('404. \nScreen does not exist!')),
+            ),
+          ),
+        );
     }
   }
 }
@@ -132,7 +145,7 @@ class CustomMaterialRoutes extends MaterialPageRoute {
   final Widget pageName;
 
   CustomMaterialRoutes({required this.pageName})
-      : super(builder: (_) => pageName);
+    : super(builder: (_) => pageName);
 }
 
 class FadeTransitionRoute<T> extends PageRouteBuilder<T> {
@@ -140,20 +153,22 @@ class FadeTransitionRoute<T> extends PageRouteBuilder<T> {
   final RouteSettings? setting;
 
   FadeTransitionRoute({required this.pageName, this.setting})
-      : super(
-          settings: setting,
-          pageBuilder: (context, animation, secondaryAnimation) => pageName,
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            const begin = 0.0;
-            const end = 1.0;
-            const curve = Curves.easeInOut;
+    : super(
+        settings: setting,
+        pageBuilder: (context, animation, secondaryAnimation) => pageName,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = 0.0;
+          const end = 1.0;
+          const curve = Curves.easeInOut;
 
-            var tween =
-                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          var tween = Tween(
+            begin: begin,
+            end: end,
+          ).chain(CurveTween(curve: curve));
 
-            var fadeAnimation = animation.drive(tween);
+          var fadeAnimation = animation.drive(tween);
 
-            return FadeTransition(opacity: fadeAnimation, child: child);
-          },
-        );
+          return FadeTransition(opacity: fadeAnimation, child: child);
+        },
+      );
 }

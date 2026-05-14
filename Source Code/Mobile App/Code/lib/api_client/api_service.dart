@@ -20,18 +20,21 @@ abstract class ApiService {
 
   @POST("/getsite_media")
   Future<GetGalleryResponseModel> getGallery(
-      @Body() GetGalleryRequestModel body);
+    @Body() GetGalleryRequestModel body,
+  );
 
   @POST("/getotp")
   Future<GetOtpResponseModel> getOtp(@Body() GetOtpRequestModel body);
 
   @POST("/matchotp")
   Future<ValidateOtpResponseModel> validateOtp(
-      @Body() ValidateOtpRequestModel body);
+    @Body() ValidateOtpRequestModel body,
+  );
 
   @POST("/forgotpassword")
   Future<UpdatePasswordResponseModel> updatePassword(
-      @Body() UpdatePasswordRequestModel body);
+    @Body() UpdatePasswordRequestModel body,
+  );
 
   @GET("/commondata")
   Future<CommonMetaData> appMetaData();

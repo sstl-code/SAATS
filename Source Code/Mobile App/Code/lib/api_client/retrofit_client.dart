@@ -21,7 +21,8 @@ abstract class RetrofitClient {
   Future<ValidateOtpResponseModel> validateOtp(ValidateOtpRequestModel request);
 
   Future<UpdatePasswordResponseModel> updatePassword(
-      UpdatePasswordRequestModel request);
+    UpdatePasswordRequestModel request,
+  );
 
   Future<CommonMetaData> getAppMetaData();
 
@@ -34,10 +35,8 @@ class UserAuthClient extends RetrofitClient {
   final IConfig config;
   final ApiService client;
 
-  UserAuthClient({
-    required this.dio,
-    required this.config,
-  }) : client = ApiService(dio, baseUrl: config.baseUrl) {
+  UserAuthClient({required this.dio, required this.config})
+    : client = ApiService(dio, baseUrl: config.baseUrl) {
     dio.interceptors.add(LoggingInterceptor());
   }
 
@@ -56,13 +55,15 @@ class UserAuthClient extends RetrofitClient {
 
   @override
   Future<ValidateOtpResponseModel> validateOtp(
-      ValidateOtpRequestModel request) {
+    ValidateOtpRequestModel request,
+  ) {
     return client.validateOtp(request);
   }
 
   @override
   Future<UpdatePasswordResponseModel> updatePassword(
-      UpdatePasswordRequestModel request) {
+    UpdatePasswordRequestModel request,
+  ) {
     return client.updatePassword(request);
   }
 

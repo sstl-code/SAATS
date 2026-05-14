@@ -47,9 +47,7 @@ class SatsTextFormField extends StatelessWidget {
       keyboardType: keyboardType,
       textCapitalization: textCapitalization,
       decoration: InputDecoration(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.0),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
         hintText: hintText,
         label: label != null ? Text(label!) : null,
       ),

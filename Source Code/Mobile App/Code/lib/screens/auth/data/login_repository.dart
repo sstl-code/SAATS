@@ -47,20 +47,23 @@ class LoginApiImpl extends LoginApiService {
     final SessionManager session = locator.get<SessionManager>();
     final body = {
       'refresh_token': session.getRefreshToken(),
-      'content-type': 'application/json'
+      'content-type': 'application/json',
     };
     log('My token :${jsonEncode(body)}');
     CustomRequest request = CustomRequest(
-        url: Urls.refreshTokenUrl,
-        urlName: 'refreshToken',
-        body: jsonEncode(body));
+      url: Urls.refreshTokenUrl,
+      urlName: 'refreshToken',
+      body: jsonEncode(body),
+    );
     CustomResponse response = await _service.onPostRequest(request);
     if (response.statusCode == 200) {
       final model = LoginModel.fromJson(response.result);
       if (model.status == 'Success') {
-        session.setExpirationTime(DateTime.now()
-            .add(Duration(seconds: model.data.expiresIn!))
-            .toString());
+        session.setExpirationTime(
+          DateTime.now()
+              .add(Duration(seconds: model.data.expiresIn!))
+              .toString(),
+        );
 
         session.setToken('${model.data.tokenType} ${model.data.accessToken}');
         session.setRefreshToken(model.data.refreshToken!);

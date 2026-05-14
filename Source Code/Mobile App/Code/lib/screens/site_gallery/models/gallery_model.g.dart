@@ -66,8 +66,8 @@ _$GalleryModelImpl _$$GalleryModelImplFromJson(Map<String, dynamic> json) =>
       filePath: json['filePath'] as String?,
       thumbnailPath: json['thumbnailPath'] as String?,
       description: json['description'] as String?,
-      siteId: json['siteId'] as int?,
-      superId: json['superId'] as int?,
+      siteId: (json['siteId'] as num?)?.toInt(),
+      superId: (json['superId'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$GalleryModelImplToJson(_$GalleryModelImpl instance) =>

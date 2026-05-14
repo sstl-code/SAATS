@@ -16,10 +16,11 @@ class CustomProxy {
   bool allowBadCertificates;
 
   /// Initializer
-  CustomProxy(
-      {required this.ipAddress,
-      required this.port,
-      this.allowBadCertificates = false});
+  CustomProxy({
+    required this.ipAddress,
+    required this.port,
+    this.allowBadCertificates = false,
+  });
 
   /// Initializer from string
   /// Note: Uses static method, rather than named init to allow final properties.
@@ -27,7 +28,9 @@ class CustomProxy {
     // Check if valid
     if (proxy == null || proxy == "") {
       assert(
-          false, "Proxy string passed to CustomProxy.fromString() is invalid.");
+        false,
+        "Proxy string passed to CustomProxy.fromString() is invalid.",
+      );
       return null;
     }
 
@@ -35,16 +38,14 @@ class CustomProxy {
     final proxyParts = proxy.split(":");
     final _ipAddress = proxyParts[0];
     final _port = proxyParts.length > 0 ? int.tryParse(proxyParts[1]) : null;
-    return CustomProxy(
-      ipAddress: _ipAddress,
-      port: _port!,
-    );
+    return CustomProxy(ipAddress: _ipAddress, port: _port!);
   }
 
   /// Enable the proxy
   void enable() {
-    HttpOverrides.global =
-        new CustomProxyHttpOverride.withProxy(this.toString());
+    HttpOverrides.global = new CustomProxyHttpOverride.withProxy(
+      this.toString(),
+    );
   }
 
   /// Disable the proxy

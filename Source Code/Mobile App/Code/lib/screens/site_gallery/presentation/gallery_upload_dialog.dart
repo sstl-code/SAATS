@@ -23,7 +23,9 @@ class _GalleryUploadDialogWidgetState extends State<GalleryUploadDialogWidget> {
   Widget build(BuildContext context) {
     return ValueListenableBuilder<Box<GalleryModel>>(
       builder: (context, box, child) {
-        final List<GalleryModel> galleryList = box.values.toList();
+        final List<GalleryModel> galleryList = box.values
+            .where((element) => element.siteId == widget.siteId)
+            .toList();
         final photosList = galleryList
             .where((item) => item.galleryType == GalleryType.photo)
             .toList();
@@ -35,20 +37,18 @@ class _GalleryUploadDialogWidgetState extends State<GalleryUploadDialogWidget> {
           shrinkWrap: true,
           physics: BouncingScrollPhysics(),
           children: [
-            SizedBox(
-              height: 10,
-            ),
+            SizedBox(height: 10),
             GallerySectionWidget(
-                galleryList: photosList,
-                siteId: widget.siteId,
-                galleryType: GalleryType.photo),
-            SizedBox(
-              height: 10,
+              galleryList: photosList,
+              siteId: widget.siteId,
+              galleryType: GalleryType.photo,
             ),
+            SizedBox(height: 10),
             GallerySectionWidget(
-                galleryList: videosList,
-                siteId: widget.siteId,
-                galleryType: GalleryType.video),
+              galleryList: videosList,
+              siteId: widget.siteId,
+              galleryType: GalleryType.video,
+            ),
           ],
         );
       },
@@ -58,11 +58,12 @@ class _GalleryUploadDialogWidgetState extends State<GalleryUploadDialogWidget> {
 }
 
 class GallerySectionWidget extends StatelessWidget {
-  const GallerySectionWidget(
-      {super.key,
-      required this.galleryList,
-      required this.siteId,
-      required this.galleryType});
+  const GallerySectionWidget({
+    super.key,
+    required this.galleryList,
+    required this.siteId,
+    required this.galleryType,
+  });
   final List<GalleryModel> galleryList;
   final int siteId;
   final GalleryType galleryType;
@@ -75,9 +76,7 @@ class GallerySectionWidget extends StatelessWidget {
           'Add ${galleryType.value}s',
           style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
         ),
-        SizedBox(
-          height: 10,
-        ),
+        SizedBox(height: 10),
         GridView.builder(
           shrinkWrap: true,
           physics: BouncingScrollPhysics(),
@@ -87,27 +86,27 @@ class GallerySectionWidget extends StatelessWidget {
           itemCount: galleryList.length + 1,
           itemBuilder: (context, index) {
             return GalleryRowWidget(
-                galleryList: galleryList,
-                index: index,
-                galleryType: galleryType,
-                siteId: siteId);
+              galleryList: galleryList,
+              index: index,
+              galleryType: galleryType,
+              siteId: siteId,
+            );
           },
         ),
-        SizedBox(
-          height: 10,
-        ),
+        SizedBox(height: 10),
       ],
     );
   }
 }
 
 class GalleryRowWidget extends StatefulWidget {
-  const GalleryRowWidget(
-      {super.key,
-      required this.galleryList,
-      required this.index,
-      required this.galleryType,
-      required this.siteId});
+  const GalleryRowWidget({
+    super.key,
+    required this.galleryList,
+    required this.index,
+    required this.galleryType,
+    required this.siteId,
+  });
   final List<GalleryModel> galleryList;
   final int index;
   final GalleryType galleryType;
@@ -123,18 +122,24 @@ class _GalleryRowWidgetState extends State<GalleryRowWidget> {
       return DottedCardWithPlusIcon(
         galleryType: widget.galleryType,
         onClick: () async {
-          Navigator.pushNamed(context, CameraScreen.routeName, arguments: {
-            'galleryType': widget.galleryType,
-            'siteId': widget.siteId
-          });
+          Navigator.pushNamed(
+            context,
+            CameraScreen.routeName,
+            arguments: {
+              'galleryType': widget.galleryType,
+              'siteId': widget.siteId,
+            },
+          );
         },
       );
     } else {
       var bean = widget.galleryList[widget.index];
 
-      File file = File((widget.galleryType == GalleryType.photo)
-          ? bean.filePath!
-          : bean.thumbnailPath!);
+      File file = File(
+        (widget.galleryType == GalleryType.photo)
+            ? bean.filePath!
+            : bean.thumbnailPath!,
+      );
 
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -145,22 +150,21 @@ class _GalleryRowWidgetState extends State<GalleryRowWidget> {
               Padding(
                 padding: const EdgeInsets.only(top: 5.0, right: 5.0),
                 child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
-                    child: (file.existsSync())
-                        ? Image.file(
-                            File((widget.galleryType == GalleryType.photo)
-                                ? bean.filePath!
-                                : bean.thumbnailPath!),
-                            height: 70,
-                            width: 70,
-                            fit: BoxFit.cover,
-                          )
-                        : Image.asset(
-                            height: 70,
-                            width: 70,
-                            'assets/images/no_image.png',
-                            fit: BoxFit.cover,
-                          )),
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: (file.existsSync())
+                      ? Image.file(
+                          file,
+                          height: 70,
+                          width: 70,
+                          fit: BoxFit.cover,
+                        )
+                      : Image.asset(
+                          height: 70,
+                          width: 70,
+                          'assets/images/no_image.png',
+                          fit: BoxFit.cover,
+                        ),
+                ),
               ),
               Positioned(
                 top: 0.0,
@@ -174,11 +178,7 @@ class _GalleryRowWidgetState extends State<GalleryRowWidget> {
                       shape: BoxShape.circle,
                       color: Colors.red,
                     ),
-                    child: Icon(
-                      Icons.cancel,
-                      size: 18.0,
-                      color: Colors.white,
-                    ),
+                    child: Icon(Icons.cancel, size: 18.0, color: Colors.white),
                   ),
                 ),
               ),
@@ -201,8 +201,11 @@ class _GalleryRowWidgetState extends State<GalleryRowWidget> {
 }
 
 class PreviewAndSetNameWidget extends StatefulWidget {
-  const PreviewAndSetNameWidget(
-      {super.key, required this.onTextChanged, required this.imageFilePath});
+  const PreviewAndSetNameWidget({
+    super.key,
+    required this.onTextChanged,
+    required this.imageFilePath,
+  });
 
   final ValueChanged<String> onTextChanged;
   final String imageFilePath;
@@ -227,14 +230,13 @@ class _PreviewAndSetNameWidgetState extends State<PreviewAndSetNameWidget> {
       physics: BouncingScrollPhysics(),
       children: [
         Container(
-            constraints: BoxConstraints(maxHeight: height * 0.4),
-            child: ClipRRect(
-                borderRadius: BorderRadius.circular(10.0),
-                child:
-                    Image.file(File(widget.imageFilePath), fit: BoxFit.fill))),
-        SizedBox(
-          height: 20,
+          constraints: BoxConstraints(maxHeight: height * 0.4),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10.0),
+            child: Image.file(File(widget.imageFilePath), fit: BoxFit.fill),
+          ),
         ),
+        SizedBox(height: 20),
         TextFormField(
           autovalidateMode: AutovalidateMode.onUserInteraction,
           validator: (val) {
