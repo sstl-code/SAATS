@@ -29,7 +29,14 @@ class AssetDetailsServiceImpl implements AssetDetailsService {
     if (response.statusCode == SUCCESS_RESPONSE_CODE) {
       return ImageResponse.fromJson(response.result);
     }
-    return ImageResponse(status: 401);
+    // Try to parse the actual PHP response body (e.g. {"status":404,"message":"please give a unique tag number"})
+    try {
+      if (response.result is Map) {
+        return ImageResponse.fromJson(response.result);
+      }
+    } catch (_) {}
+    return ImageResponse(
+        status: response.statusCode, message: response.message);
   }
 
   @override

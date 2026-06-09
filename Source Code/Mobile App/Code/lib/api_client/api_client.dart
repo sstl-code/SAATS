@@ -189,15 +189,16 @@ class HttpServiceImpl implements BaseHttpService {
     List<Map<String, String>> data,
   ) async {
     for (Map<String, String> myMap in data) {
-      myMap.forEach((key, value) async {
-        File file = File(value);
+      for (var entry in myMap.entries) {
+        File file = File(entry.value);
         if (file.existsSync()) {
           List<int> fileBytes = await file.readAsBytes();
           request.files.add(
-            MultipartFile.fromBytes(key, fileBytes, filename: value),
+            MultipartFile.fromBytes(entry.key, fileBytes,
+                filename: entry.value),
           );
         }
-      });
+      }
     }
   }
 
