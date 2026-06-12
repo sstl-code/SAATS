@@ -22,7 +22,8 @@ class ApiController extends Controller
     }
       $data=RoleUserMappers::where('user_id',$request->userId)->where('user_role_mapper_status','t')->first();
       $user=User::where('id',$request->userId)->first();
-      return response()->json(['status' => 200,'data' =>$data->functions->pluck('function_url'),'user'=> $user]);
+      $functions = $data ? $data->functions->pluck('function_url') : [];
+      return response()->json(['status' => 200,'data' => $functions,'user'=> $user]);
       
     }
 }
