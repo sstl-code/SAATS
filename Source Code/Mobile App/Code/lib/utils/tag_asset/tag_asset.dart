@@ -46,26 +46,28 @@ void scanQR({
                       onImageCaputedFailed();
                     },
                   ),
-                  footer: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () async {
-                          if (value != '-1') {
-                            onQrScanned(value);
-                          }
-                          Navigator.pop(context);
-                        },
-                        child: const Text(Strings.btnOk),
-                      ),
-                      const SizedBox(width: 10),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text(Strings.btnCancel),
-                      ),
-                    ],
+                  footer: Builder(
+                    builder: (dialogContext) => Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () async {
+                            if (value != '-1') {
+                              onQrScanned(value);
+                            }
+                            Navigator.pop(dialogContext);
+                          },
+                          child: const Text(Strings.btnOk),
+                        ),
+                        const SizedBox(width: 10),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(dialogContext);
+                          },
+                          child: const Text(Strings.btnCancel),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );
