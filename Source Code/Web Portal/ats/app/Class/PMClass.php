@@ -145,6 +145,7 @@ class PMClass
         $pmWorkspace = env('PM_WORKSAPCE');
         $ch = curl_init($pmServer . "/api/1.0/workflow/cases/draft");
         curl_setopt($ch, CURLOPT_HTTPHEADER, array("Authorization: Bearer " . $accessToken));
+        curl_setopt($ch, CURLOPT_TIMEOUT, 60);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $aCases = json_decode(curl_exec($ch));
     
